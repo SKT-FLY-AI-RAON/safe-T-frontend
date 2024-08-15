@@ -14,11 +14,11 @@ class setting extends StatelessWidget {
         child: Column(
           children: [
             Image.asset('assets/Frame5028.png'),
-            SizedBox(height: 10,),
+            Container(color:Color(0x189c9c9c),height: 10,),
             Container(
               decoration: BoxDecoration(
                 border:Border(
-                  top: BorderSide(color: Color(0x2D808080)), // 위쪽 테두리
+                  // top: BorderSide(color: Color(0x2D808080)), // 위쪽 테두리
                   bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
                 ),
               ),
