@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'mqtt_test_screen.dart';
 
 class home extends StatelessWidget {
   const home({super.key});
@@ -101,6 +102,14 @@ class home extends StatelessWidget {
                                 // 4번 박스
                                 Expanded(
                                   child: SizedBox(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder:(c) => MqttTestScreen())
+                                        );
+                                      },
+                                    ),
                                       // decoration: BoxDecoration(
                                       //   border: Border.all(),
                                       // ),
