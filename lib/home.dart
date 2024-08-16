@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
-import 'setting.dart';
 import 'mqtt_test_screen.dart';
+import 'map_screen.dart'; // map_screen.dart 파일을 임포트합니다.
 
-class home extends StatefulWidget {
-  const home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  State<Home> createState() => _HomeState();
 }
 
-class _homeState extends State<home> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,34 +28,39 @@ class _homeState extends State<home> {
             ),
             Scaffold(
               floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.send),
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (c) => BluetoothScreen()
-                        ),
-                    );
-                  },
+                child: Icon(Icons.send),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => BluetoothScreen(),
+                    ),
+                  );
+                },
               ),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 actions: [
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      print('Send button pressed');
+                    },
+                  ),
                   TextButton(
                     child: Text(''),
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(Size(50, 50)),
-                      // 고정된 크기 설정 (폭과 높이를 동일하게)
                       shape: MaterialStateProperty.all<CircleBorder>(
-                        CircleBorder(), // 원형 버튼
+                        CircleBorder(),
                       ),
-                      overlayColor: MaterialStateProperty.all(
-                          Colors.transparent), // 물결 효과 없애기
+                      overlayColor:
+                      MaterialStateProperty.all(Colors.transparent),
                     ),
                     onPressed: () {
-                      print('hi');
+                      print('TextButton pressed');
                     },
                   ),
                   SizedBox(width: 8),
@@ -65,29 +70,20 @@ class _homeState extends State<home> {
                 children: [
                   Flexible(
                     flex: 4,
-                    child: Container(
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(),
-                        // ),
-                        ),
+                    child: Container(),
                   ),
-                ),
-                // 4 박스 시작부분
-                Flexible(
-                  flex: 18,
-                  child: SizedBox(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
-                            child: Row(
-                              children: [
-                                // 1번 박스
-                                Expanded(
-                                  child: SizedBox(
+                  // 4개 박스 부분 시작부분
+                  Flexible(
+                    flex: 18,
+                    child: SizedBox(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  // 1번 박스
+                                  Expanded(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           left: 15.0,
@@ -96,74 +92,62 @@ class _homeState extends State<home> {
                                           bottom: 4),
                                       child: GestureDetector(
                                         onTap: () {
-                                          // 버튼이 클릭되었을 때 실행되는 코드
-                                          print('Container 버튼 클릭됨');
+                                          // 1번 박스 클릭 시 MapScreen으로 이동
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                              const MapScreen(),
+                                            ),
+                                          );
                                         },
+                                        child: Container(
+                                          color: Colors.blue, // 박스의 색상
+                                        ),
                                       ),
                                     ),
-                                    // decoration: BoxDecoration(
-                                    //   border: Border.all(),
-                                    // ),
                                   ),
-                                ),
-                                // 2번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                              ],
+                                  // 2번 박스
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
-                            child: Row(
-                              children: [
-                                // 3번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                                // 4번 박스
-                                Expanded(
-                                  child: SizedBox(
+                          Expanded(
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  // 3번 박스
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                  // 4번 박스
+                                  Expanded(
                                     child: GestureDetector(
                                       onTap: () {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder:(c) => MqttTestScreen())
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) =>
+                                                MqttTestScreen(),
+                                          ),
                                         );
                                       },
                                     ),
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                // 메인 서비스 루트 시작
-                Flexible(
-                  flex: 5,
-                  child: SizedBox(
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(),
-                    // ),
+                  // 메인 서비스 루트 시작
+                  Flexible(
+                    flex: 5,
                     child: Stack(
                       children: [
                         Image.asset(
@@ -172,33 +156,28 @@ class _homeState extends State<home> {
                           height: double.infinity,
                           fit: BoxFit.fill,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 12, left: 12),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (c) => setting()));
-                            },
-                          ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (c) => setting(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 23,
-                  child: SizedBox(
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(),
-                      // ),
-                      ),
-                ),
-              ],
+                  Flexible(
+                    flex: 23,
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
