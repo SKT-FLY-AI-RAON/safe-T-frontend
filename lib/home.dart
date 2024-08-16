@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'mqtt_test_screen.dart';
+import 'package:flutter/services.dart';
+import 'map_screen.dart'; // map_screen.dart 파일을 임포트합니다.
 
-class home extends StatelessWidget {
-  const home({super.key});
+class Home extends StatelessWidget {
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,6 @@ class home extends StatelessWidget {
                       children: [
                         Expanded(
                           child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
                             child: Row(
                               children: [
                                 // 1번 박스
@@ -62,23 +60,25 @@ class home extends StatelessWidget {
                                           bottom: 4),
                                       child: GestureDetector(
                                         onTap: () {
-                                          // 버튼이 클릭되었을 때 실행되는 코드
-                                          print('Container 버튼 클릭됨');
+                                          // 1번 박스 클릭 시 MapScreen으로 이동
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const MapScreen(),
+
+                                            ),
+                                          );
                                         },
+                                        child: Container(
+                                          color: Colors.blue, // 박스의 색상
+                                        ),
                                       ),
                                     ),
-                                    // decoration: BoxDecoration(
-                                    //   border: Border.all(),
-                                    // ),
                                   ),
                                 ),
                                 // 2번 박스
                                 Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
+                                  child: SizedBox(),
                                 ),
                               ],
                             ),
@@ -86,34 +86,15 @@ class home extends StatelessWidget {
                         ),
                         Expanded(
                           child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
                             child: Row(
                               children: [
                                 // 3번 박스
                                 Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
+                                  child: SizedBox(),
                                 ),
                                 // 4번 박스
                                 Expanded(
-                                  child: SizedBox(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder:(c) => MqttTestScreen())
-                                        );
-                                      },
-                                    ),
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
+                                  child: SizedBox(),
                                 ),
                               ],
                             ),
@@ -133,28 +114,21 @@ class home extends StatelessWidget {
                           'assets/Component_3.png',
                           width: double.infinity,
                           height: double.infinity,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                         ),
                         GestureDetector(
                           onTap: () {
-                            // 버튼이 클릭되었을 때 실행되는 코드
+                            // 버튼 클릭 시 실행할 코드
                             print('Container 버튼 클릭됨');
                           },
                         ),
                       ],
                     ),
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(),
-                    // ),
                   ),
                 ),
                 Flexible(
                   flex: 23,
-                  child: SizedBox(
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(),
-                      // ),
-                      ),
+                  child: SizedBox(),
                 ),
               ],
             ),
