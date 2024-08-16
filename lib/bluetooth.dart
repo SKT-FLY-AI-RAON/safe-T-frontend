@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:csv/csv.dart';
 
 class BluetoothScreen extends StatefulWidget {
@@ -17,15 +18,24 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   BluetoothConnection? connection;
   BluetoothDevice? selectedDevice;
 
+  void checkPermissions() async {
+    if (await Permission.bluetoothConnect.request().isGranted) {
+      // 권한이 부여된 경우 페어링된 장치를 가져옵니다.
+      getPairedDevices();
+    } else {
+      print("Bluetooth connect permission not granted.");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    getPairedDevices();
-    generateCsvFile();
+    checkPermissions();
+    // generateCsvFile();
   }
 
   // 페어링된 장치를 가져오는 함수
-  Future<void> getPairedDevices() async {
+  void getPairedDevices() async {
 
     List<BluetoothDevice> devices = [];
     try {
@@ -243,22 +253,22 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     ['time','RPM', 'Speed', 'Load', 'ThrottlePos','PedalPos','FuelStatus'],
   ];
   // 데이터 csv 로 변환
-  Future<void> generateCsvFile() async {
-    // 데이터 준비
-
-    // CSV 형식으로 변환
-    String csvData = const ListToCsvConverter().convert(data);
-
-    // 파일 저장 경로 가져오기
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/OBD_data.csv';
-
-    // 파일 저장
-    final file = File(path);
-    await file.writeAsString(csvData);
-
-    print('CSV 파일이 저장되었습니다: $path');
-  }
+  // Future<void> generateCsvFile() async {
+  //   // 데이터 준비
+  //
+  //   // CSV 형식으로 변환
+  //   String csvData = const ListToCsvConverter().convert(data);
+  //
+  //   // 파일 저장 경로 가져오기
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final path = '${directory.path}/OBD_data.csv';
+  //
+  //   // 파일 저장
+  //   final file = File(path);
+  //   await file.writeAsString(csvData);
+  //
+  //   print('CSV 파일이 저장되었습니다: $path');
+  // }
   @override
   void dispose() {
     connection?.dispose();
