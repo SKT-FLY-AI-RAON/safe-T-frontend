@@ -1,8 +1,8 @@
-import 'dart:convert'; // UTF-8 인코딩을 위해 추가
+import 'dart:convert'; // JSON 인코딩을 위해 추가
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
-Future<void> publishMessage(String message) async {
+Future<void> publishJsonMessage(Map<String, dynamic> message) async {
   final String broker = '3.35.30.20'; // EC2 인스턴스 IP
   final int port = 1883;
   final String topic = 'test/topic';
@@ -28,13 +28,16 @@ Future<void> publishMessage(String message) async {
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
       print('Connected to the broker');
 
-      // 메시지를 UTF-8로 인코딩
+      // Dart 객체를 JSON 문자열로 변환
+      String jsonString = jsonEncode(message);
+
+      // 메시지를 UTF-8로 인코딩하여 발행
       final builder = MqttClientPayloadBuilder();
-      builder.addUTF8String(message);  // UTF-8로 문자열을 추가
+      builder.addUTF8String(jsonString);
 
       // 메시지 발행
       client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-      print('Message "$message" published to topic "$topic"');
+      print('JSON message published to topic "$topic": $jsonString');
     } else {
       print('Failed to connect to the broker: ${client.connectionStatus}');
     }

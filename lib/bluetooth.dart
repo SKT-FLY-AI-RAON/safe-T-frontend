@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 
+import 'mqtt_publisher.dart';
+
 class BluetoothScreen extends StatefulWidget {
   @override
   _BluetoothScreenState createState() => _BluetoothScreenState();
@@ -134,7 +136,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       startListeningToOBD();
     }
   }
-  // 실제로 데이터를 요청시키는 함수를 호출하는 함수
+
+
+  // 실제로 데이터를 요청시키는 함수를 호출하는 함수 -> MQTT로 발행
   Future<void> requestAllData() async{
     await sendOBDCommand("010C");  // 엔진 RPM 요청
     await Future.delayed(Duration(milliseconds: 100));
@@ -148,12 +152,33 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     await Future.delayed(Duration(milliseconds: 100));
     await sendOBDCommand("0103"); // 연료 시스템 상태
     await Future.delayed(Duration(milliseconds: 100));
-    List<String> data1 = [DateTime.now().toString(),rpm.toString(),
-      speed.toString(),load.toString(),throttle.toString(),pedal.toString(),
-      fuelSystemStatus.toString(),];
-    // setState(() {
-    //   data.add(data1);
-    // });
+
+    // 데이터를 리스트로 수집
+    List<String> data1 = [
+      DateTime.now().toString(),  // 시간
+      rpm.toString(),             // 엔진 RPM
+      speed.toString(),           // 차량 속도
+      load.toString(),            // 엔진 부하
+      throttle.toString(),         // 스로틀 위치
+      pedal.toString(),           // 가속 페달 위치
+      fuelSystemStatus.toString(), // 연료 시스템 상태
+    ];
+
+    // 데이터 매핑: time, rpm, speed, load, throttle, pedal, fuelSystemStatus
+    Map<String, dynamic> jsonData = {
+      'time': data1[0],
+      'rpm': data1[1],
+      'speed': data1[2],
+      'load': data1[3],
+      'throttle': data1[4],
+      'pedal': data1[5],
+      'fuelSystemStatus': data1[6],
+    };
+
+    // JSON으로 변환 후 MQTT 발행
+    await publishJsonMessage(jsonData);
+
+    // CSV 파일에 데이터 추가
     await appendCsvRow(data1);
   }
 
