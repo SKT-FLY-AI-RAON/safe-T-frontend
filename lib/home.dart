@@ -124,7 +124,7 @@ class home extends StatelessWidget {
                           'assets/Component_3.png',
                           width: double.infinity,
                           height: double.infinity,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                         GestureDetector(
                           onTap: () {
