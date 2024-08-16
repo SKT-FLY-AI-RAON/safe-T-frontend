@@ -7,18 +7,41 @@ class MqttTestScreen extends StatefulWidget {
 }
 
 class _MqttTestScreenState extends State<MqttTestScreen> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
   String _statusMessage = "";
 
   // MQTT 발행 로직을 호출하는 메소드
   Future<void> _sendMessage() async {
-    String message = _controller.text;
-    if (message.isNotEmpty) {
+    String title = _titleController.text;
+    String content = _contentController.text;
+
+    if (title.isNotEmpty && content.isNotEmpty) {
       setState(() {
         _statusMessage = "Sending message...";
       });
+
+      // JSON 형태의 메시지 생성
+      // Map<String, dynamic> message = {
+      //   'title': title,
+      //   'content': content,
+      //   'timestamp': DateTime.now().toString(),
+      // };
+
+      Map<String, dynamic> message = {
+        'time': DateTime.now().toString(),
+        'rpm':  1,
+        'speed': 2,
+        'load': 3,
+        'throttle': 4,
+        'pedal': 5,
+        'fuelSystemStatus': title,
+      };
+
+
       try {
-        await publishMessage(message);
+        // JSON 메시지 발행
+        await publishJsonMessage(message);
         setState(() {
           _statusMessage = "Message sent successfully!";
         });
@@ -27,6 +50,10 @@ class _MqttTestScreenState extends State<MqttTestScreen> {
           _statusMessage = "Failed to send message: $e";
         });
       }
+    } else {
+      setState(() {
+        _statusMessage = "Title and content must not be empty!";
+      });
     }
   }
 
@@ -34,16 +61,23 @@ class _MqttTestScreenState extends State<MqttTestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MQTT Test Screen'),
+        title: Text('MQTT JSON Message Sender'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              controller: _controller,
+              controller: _titleController,
               decoration: InputDecoration(
-                labelText: 'Enter message',
+                labelText: 'Enter title',
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _contentController,
+              decoration: InputDecoration(
+                labelText: 'Enter content',
               ),
             ),
             SizedBox(height: 20),

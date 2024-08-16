@@ -1,47 +1,61 @@
-import 'dart:convert'; // UTF-8 인코딩을 위해 추가
+import 'dart:convert'; // JSON 인코딩을 위해 추가
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'dart:io'; // SocketException 처리를 위해 추가
 
-Future<void> publishMessage(String message) async {
+Future<void> publishJsonMessage(Map<String, dynamic> message) async {
   final String broker = '3.35.30.20'; // EC2 인스턴스 IP
   final int port = 1883;
   final String topic = 'test/topic';
 
   // 고유한 클라이언트 식별자 생성 (최대 23자)
-  String clientId = 'flutter_client_' + DateTime.now().millisecondsSinceEpoch.toString();
+  String clientId = 'flutter_client_' + DateTime
+      .now()
+      .millisecondsSinceEpoch
+      .toString();
 
   // MQTT 클라이언트 생성
   final client = MqttServerClient(broker, '');
   client.port = port;
   client.logging(on: true);
 
+  // 자동 재연결 활성화
+  client.autoReconnect = true;
+
   // 연결 설정
   client.connectionMessage = MqttConnectMessage()
       .withClientIdentifier(clientId)
+      .withWillQos(MqttQos.atLeastOnce)
       .keepAliveFor(60)
-      .startClean()
-      .withWillQos(MqttQos.atLeastOnce);
+      .startClean();
+  client.connectTimeoutPeriod = 10000; // 10초로 타임아웃 시간 설정
+
 
   try {
-    // 브로커에 연결
+    print('Attempting to connect to the broker at $broker...');
     await client.connect();
+
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
       print('Connected to the broker');
 
-      // 메시지를 UTF-8로 인코딩
+      // Dart 객체를 JSON 문자열로 변환
+      String jsonString = jsonEncode(message);
+
+      // 메시지를 UTF-8로 인코딩하여 발행
       final builder = MqttClientPayloadBuilder();
-      builder.addUTF8String(message);  // UTF-8로 문자열을 추가
+      builder.addUTF8String(jsonString);
 
       // 메시지 발행
+      print('Publishing message to topic "$topic": $jsonString');
       client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-      print('Message "$message" published to topic "$topic"');
+
+      print('JSON message published successfully to topic "$topic"');
     } else {
       print('Failed to connect to the broker: ${client.connectionStatus}');
     }
-  } catch (e) {
-    print('Connection failed: $e');
-    client.disconnect();
-  } finally {
-    client.disconnect();
+  } on NoConnectionException catch (e) {
+    print('No connection exception: $e');
+  } on SocketException catch (e) {
+    print('Socket exc');
   }
 }
