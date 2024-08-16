@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:raon_frontend/setting.dart';
+import 'bluetooth.dart';
 import 'mqtt_test_screen.dart';
 
 class home extends StatefulWidget {
@@ -25,15 +27,15 @@ class _homeState extends State<home> {
             ),
             Scaffold(
               floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.send),
-                  onPressed: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (c) => BluetoothScreen()
-                        ),
-                    );
-                  },
+                child: Icon(Icons.send),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => BluetoothScreen(),
+                    ),
+                  );
+                },
               ),
               backgroundColor: Colors.transparent,
               appBar: AppBar(
@@ -44,7 +46,6 @@ class _homeState extends State<home> {
                     child: Text(''),
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(Size(50, 50)),
-                      // 고정된 크기 설정 (폭과 높이를 동일하게)
                       shape: MaterialStateProperty.all<CircleBorder>(
                         CircleBorder(), // 원형 버튼
                       ),
@@ -62,11 +63,7 @@ class _homeState extends State<home> {
                 children: [
                   Flexible(
                     flex: 4,
-                    child: Container(
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(),
-                        // ),
-                        ),
+                    child: Container(),
                   ),
                   // 4개 박스 부분 시작부분
                   Flexible(
@@ -76,39 +73,26 @@ class _homeState extends State<home> {
                         children: [
                           Expanded(
                             child: SizedBox(
-                              // decoration: BoxDecoration(
-                              //   border: Border.all(),
-                              // ),
                               child: Row(
                                 children: [
                                   // 1번 박스
                                   Expanded(
-                                    child: SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0,
-                                            right: 4,
-                                            top: 10,
-                                            bottom: 4),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // 버튼이 클릭되었을 때 실행되는 코드
-                                            print('Container 버튼 클릭됨');
-                                          },
-                                        ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0,
+                                          right: 4,
+                                          top: 10,
+                                          bottom: 4),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          print('Container 버튼 클릭됨');
+                                        },
                                       ),
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
                                     ),
                                   ),
                                   // 2번 박스
                                   Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
+                                    child: SizedBox(),
                                   ),
                                 ],
                               ),
@@ -116,26 +100,25 @@ class _homeState extends State<home> {
                           ),
                           Expanded(
                             child: SizedBox(
-                              // decoration: BoxDecoration(
-                              //   border: Border.all(),
-                              // ),
                               child: Row(
                                 children: [
                                   // 3번 박스
                                   Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
+                                    child: SizedBox(),
                                   ),
                                   // 4번 박스
                                   Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) =>
+                                                MqttTestScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -148,169 +131,40 @@ class _homeState extends State<home> {
                   // 메인 서비스 루트 시작
                   Flexible(
                     flex: 5,
-                    child: SizedBox(
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(),
-                      // ),
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/main_service_root.png',
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12, left: 12),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (c) => setting()));
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 23,
-                    child: SizedBox(
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(),
-                        // ),
-                        ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-                ),
-                // 4 박스 시작부분
-                Flexible(
-                  flex: 18,
-                  child: SizedBox(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
-                            child: Row(
-                              children: [
-                                // 1번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 15.0,
-                                          right: 4,
-                                          top: 10,
-                                          bottom: 4),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // 버튼이 클릭되었을 때 실행되는 코드
-                                          print('Container 버튼 클릭됨');
-                                        },
-                                      ),
-                                    ),
-                                    // decoration: BoxDecoration(
-                                    //   border: Border.all(),
-                                    // ),
-                                  ),
-                                ),
-                                // 2번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: SizedBox(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(),
-                            // ),
-                            child: Row(
-                              children: [
-                                // 3번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                                // 4번 박스
-                                Expanded(
-                                  child: SizedBox(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder:(c) => MqttTestScreen())
-                                        );
-                                      },
-                                    ),
-                                      // decoration: BoxDecoration(
-                                      //   border: Border.all(),
-                                      // ),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // 메인 서비스 루트 시작
-                Flexible(
-                  flex: 5,
-                  child: SizedBox(
                     child: Stack(
                       children: [
                         Image.asset(
-                          'assets/Component_3.png',
+                          'assets/main_service_root.png',
                           width: double.infinity,
                           height: double.infinity,
                           fit: BoxFit.fill,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            // 버튼이 클릭되었을 때 실행되는 코드
-                            print('Container 버튼 클릭됨');
-                          },
+                        Padding(
+                          padding:
+                          const EdgeInsets.only(right: 12, left: 12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (c) => setting(),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
-                    // decoration: BoxDecoration(
-                    //   border: Border.all(),
-                    // ),
                   ),
-                ),
-                Flexible(
-                  flex: 23,
-                  child: SizedBox(
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(),
-                      // ),
-                      ),
-                ),
-              ],
+                  Flexible(
+                    flex: 23,
+                    child: SizedBox(),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
