@@ -22,12 +22,22 @@ class _MqttTestScreenState extends State<MqttTestScreen> {
       });
 
       // JSON 형태의 메시지 생성
-      // TODO OBD 데이터의 데이터 row로 변경
+      // Map<String, dynamic> message = {
+      //   'title': title,
+      //   'content': content,
+      //   'timestamp': DateTime.now().toString(),
+      // };
+
       Map<String, dynamic> message = {
-        'title': title,
-        'content': content,
-        'timestamp': DateTime.now().toString(),
+        'time': DateTime.now().toString(),
+        'rpm':  1,
+        'speed': 2,
+        'load': 3,
+        'throttle': 4,
+        'pedal': 5,
+        'fuelSystemStatus': title,
       };
+
 
       try {
         // JSON 메시지 발행
