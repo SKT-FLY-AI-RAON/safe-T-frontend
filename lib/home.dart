@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'bluetooth.dart';
 import 'setting.dart';
+import 'mqtt_test_screen.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -70,126 +71,134 @@ class _homeState extends State<home> {
                         // ),
                         ),
                   ),
-                  // 4개 박스 부분 시작부분
-                  Flexible(
-                    flex: 18,
-                    child: SizedBox(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              // decoration: BoxDecoration(
-                              //   border: Border.all(),
-                              // ),
-                              child: Row(
-                                children: [
-                                  // 1번 박스
-                                  Expanded(
-                                    child: SizedBox(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0,
-                                            right: 4,
-                                            top: 10,
-                                            bottom: 4),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            // 버튼이 클릭되었을 때 실행되는 코드
-                                            print('Container 버튼 클릭됨');
-                                          },
-                                        ),
+                ),
+                // 4 박스 시작부분
+                Flexible(
+                  flex: 18,
+                  child: SizedBox(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            // decoration: BoxDecoration(
+                            //   border: Border.all(),
+                            // ),
+                            child: Row(
+                              children: [
+                                // 1번 박스
+                                Expanded(
+                                  child: SizedBox(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0,
+                                          right: 4,
+                                          top: 10,
+                                          bottom: 4),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // 버튼이 클릭되었을 때 실행되는 코드
+                                          print('Container 버튼 클릭됨');
+                                        },
                                       ),
+                                    ),
+                                    // decoration: BoxDecoration(
+                                    //   border: Border.all(),
+                                    // ),
+                                  ),
+                                ),
+                                // 2번 박스
+                                Expanded(
+                                  child: SizedBox(
                                       // decoration: BoxDecoration(
                                       //   border: Border.all(),
                                       // ),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            // decoration: BoxDecoration(
+                            //   border: Border.all(),
+                            // ),
+                            child: Row(
+                              children: [
+                                // 3번 박스
+                                Expanded(
+                                  child: SizedBox(
+                                      // decoration: BoxDecoration(
+                                      //   border: Border.all(),
+                                      // ),
+                                      ),
+                                ),
+                                // 4번 박스
+                                Expanded(
+                                  child: SizedBox(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder:(c) => MqttTestScreen())
+                                        );
+                                      },
                                     ),
-                                  ),
-                                  // 2번 박스
-                                  Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
-                                  ),
-                                ],
-                              ),
+                                      // decoration: BoxDecoration(
+                                      //   border: Border.all(),
+                                      // ),
+                                      ),
+                                ),
+                              ],
                             ),
                           ),
-                          Expanded(
-                            child: SizedBox(
-                              // decoration: BoxDecoration(
-                              //   border: Border.all(),
-                              // ),
-                              child: Row(
-                                children: [
-                                  // 3번 박스
-                                  Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
-                                  ),
-                                  // 4번 박스
-                                  Expanded(
-                                    child: SizedBox(
-                                        // decoration: BoxDecoration(
-                                        //   border: Border.all(),
-                                        // ),
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  // 메인 서비스 루트 시작
-                  Flexible(
-                    flex: 5,
-                    child: SizedBox(
+                ),
+                // 메인 서비스 루트 시작
+                Flexible(
+                  flex: 5,
+                  child: SizedBox(
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(),
+                    // ),
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/main_service_root.png',
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.fill,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12, left: 12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (c) => setting()));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 23,
+                  child: SizedBox(
                       // decoration: BoxDecoration(
                       //   border: Border.all(),
                       // ),
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/main_service_root.png',
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12, left: 12),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (c) => setting()));
-                              },
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 23,
-                    child: SizedBox(
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(),
-                        // ),
-                        ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
