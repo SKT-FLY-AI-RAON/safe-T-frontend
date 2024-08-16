@@ -33,15 +33,34 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    //yongug kotlin Options added
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.raon_frontend"
+
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
+        //minSdk = flutter.minSdkVersion
+        //yongug minSdk changed
+        minSdkVersion 23
+
+
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        //yongug
+        //manifestPlaceholders["naverMapApiKey"] = naverMapApiKey
+        // "String", "NAVER_MAP_API_KEY", "\"\""
+
+        manifestPlaceholders = [
+                naverMapApiKey: "djww0m5kpg",
+//                applicationName: "com.example.raon_frontend"
+        ]
     }
 
     buildTypes {
@@ -50,6 +69,12 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
+    }
+
+    //yongug dependency added
+    // Add the dependencies block
+    dependencies {
+        implementation 'com.google.android.gms:play-services-location:21.0.1'
     }
 }
 

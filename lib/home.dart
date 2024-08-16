@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
 import 'mqtt_test_screen.dart';
+import 'map_screen.dart'; // map_screen.dart 파일을 임포트합니다.
 
-class home extends StatefulWidget {
-  const home({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  State<Home> createState() => _HomeState();
 }
 
-class _homeState extends State<home> {
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,18 +43,24 @@ class _homeState extends State<home> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 actions: [
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: () {
+                      print('Send button pressed');
+                    },
+                  ),
                   TextButton(
                     child: Text(''),
                     style: ButtonStyle(
                       fixedSize: MaterialStateProperty.all(Size(50, 50)),
                       shape: MaterialStateProperty.all<CircleBorder>(
-                        CircleBorder(), // 원형 버튼
+                        CircleBorder(),
                       ),
-                      overlayColor: MaterialStateProperty.all(
-                          Colors.transparent), // 물결 효과 없애기
+                      overlayColor:
+                      MaterialStateProperty.all(Colors.transparent),
                     ),
                     onPressed: () {
-                      print('hi');
+                      print('TextButton pressed');
                     },
                   ),
                   SizedBox(width: 8),
@@ -85,8 +92,18 @@ class _homeState extends State<home> {
                                           bottom: 4),
                                       child: GestureDetector(
                                         onTap: () {
-                                          print('Container 버튼 클릭됨');
+                                          // 1번 박스 클릭 시 MapScreen으로 이동
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                              const MapScreen(),
+                                            ),
+                                          );
                                         },
+                                        child: Container(
+                                          color: Colors.blue, // 박스의 색상
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -139,19 +156,15 @@ class _homeState extends State<home> {
                           height: double.infinity,
                           fit: BoxFit.fill,
                         ),
-                        Padding(
-                          padding:
-                          const EdgeInsets.only(right: 12, left: 12),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (c) => setting(),
-                                ),
-                              );
-                            },
-                          ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (c) => setting(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
