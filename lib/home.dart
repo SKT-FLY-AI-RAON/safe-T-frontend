@@ -101,9 +101,7 @@ class _HomeState extends State<Home> {
                                             ),
                                           );
                                         },
-                                        child: Container(
-                                          color: Colors.blue, // 박스의 색상
-                                        ),
+
                                       ),
                                     ),
                                   ),
