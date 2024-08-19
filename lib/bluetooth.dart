@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:csv/csv.dart';
 
-import 'mqtt_publisher.dart';
+import 'mqtt/mqtt_publisher.dart';
 
 class BluetoothScreen extends StatefulWidget {
   @override
@@ -323,8 +323,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
             trailing: device == selectedDevice
                 ? Icon(Icons.bluetooth_connected, color: Colors.blue)
                 : null,
-            onTap: () {
-              connectToDevice(device);
+            onTap: () async {
+              await connectToDevice(device);
             },
           );
         },
