@@ -642,12 +642,12 @@ class HorizontalScrollableCards extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // 안내시작 버튼 동작
-              },
-              child: Text('안내시작'),
-            ),
+            // child: ElevatedButton(
+            //   onPressed: () {
+            //     // 안내시작 버튼 동작
+            //   },
+            //   child: Text('안내시작'),
+            // ),
           ),
         ],
       ),
@@ -697,13 +697,13 @@ class HorizontalScrollableCards extends StatelessWidget {
             style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
           Spacer(),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {},
-              child: Text('상세'),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.centerRight,
+          //   child: TextButton(
+          //     onPressed: () {},
+          //     child: Text('상세'),
+          //   ),
+          // ),
         ],
       ),
     );
