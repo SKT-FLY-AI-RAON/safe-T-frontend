@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // NaverMap SDK 초기화 및 clientId 설정
-  await NaverMapSdk.instance.initialize(clientId: 'djww0m5kpg');
+  // await NaverMapSdk.instance.initialize(clientId: 'djww0m5kpg');
 
   // 상태 표시줄 스타일 설정
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
