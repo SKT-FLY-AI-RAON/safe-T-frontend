@@ -173,7 +173,7 @@ class _agreeScreenState extends State<agreeScreen> {
           ),
           // 제일 하단 넘어가기
           Flexible(
-            flex: 2,
+            flex: 3,
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
