@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
-import 'mqtt_test_screen.dart';
-import 'map_screen.dart'; // map_screen.dart 파일을 임포트합니다.
+import 'mqtt/mqtt_publisher_test_screen.dart';
+import 'map_screen.dart';
+import 'mqtt/mqtt_subscriber_test_screen.dart'; // map_screen.dart 파일을 임포트합니다.
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -121,7 +122,17 @@ class _HomeState extends State<Home> {
                                 children: [
                                   // 3번 박스
                                   Expanded(
-                                    child: SizedBox(),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) =>
+                                                MqttSubscriberTestScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                   // 4번 박스
                                   Expanded(
