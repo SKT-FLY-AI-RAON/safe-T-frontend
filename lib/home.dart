@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:raon_frontend/agreeScreen.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
 import 'mqtt/mqtt_publisher_test_screen.dart';
@@ -181,6 +182,7 @@ class Home extends StatelessWidget {
                                           top: 10,
                                           bottom: 5),
                                       child: Box(
+                                        page:MapScreen(),
                                         tt: '내비',
                                         stt: '가장 빠르고 정확한 길안내',
                                         img: 'assets/car.png',
@@ -274,12 +276,13 @@ class Home extends StatelessWidget {
                     margin: EdgeInsets.only(right: 15, left: 15),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (c) => setting(),
-                          ),
-                        );
+                        // 추가 처리 필요
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => agreeScreen(),
+                            ),
+                          );
                       },
                       child: ListTile(
                         title: Text('SAFT-T',
