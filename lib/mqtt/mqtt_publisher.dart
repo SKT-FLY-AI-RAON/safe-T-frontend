@@ -6,7 +6,7 @@ import 'dart:io'; // SocketException 처리를 위해 추가
 Future<void> publishJsonMessage(Map<String, dynamic> message) async {
   final String broker = '3.35.30.20'; // EC2 인스턴스 IP
   final int port = 1883;
-  final String topic = 'test/topic';
+  final String topic = 'obd/topic';
 
   // 고유한 클라이언트 식별자 생성 (최대 23자)
   String clientId = 'flutter_client_' + DateTime

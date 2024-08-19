@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
-import 'mqtt_test_screen.dart';
-import 'map_screen.dart'; // map_screen.dart 파일을 임포트합니다.
+import 'mqtt/mqtt_publisher_test_screen.dart';
+import 'map_screen.dart';
+import 'mqtt/mqtt_subscriber_test_screen.dart'; // map_screen.dart 파일을 임포트합니다.
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -94,6 +95,39 @@ class Home extends StatelessWidget {
                                     spreadRadius: 0,
                                     blurRadius: 2,
                                     offset: Offset(3, 3), // 그림자의 위치 조정
+
+                          Expanded(
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  // 3번 박스
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) =>
+                                                MqttSubscriberTestScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  // 4번 박스
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) =>
+                                                MqttTestScreen(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+
                                   ),
                                 ],
                               ),
