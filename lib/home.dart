@@ -200,7 +200,7 @@ class Home extends StatelessWidget {
                                         top: 10,
                                         bottom: 5),
                                     child: Box(
-                                      page: BottomSheetExample(),
+                                      page: MyHomePage(),
                                       tt: '대중교통',
                                       stt: '버스, 지하철도 티맵에서',
                                       img: 'assets/bus.png',
@@ -366,34 +366,6 @@ class Home extends StatelessWidget {
                     label: '전체'),
               ],
             ),
-            floatingActionButton: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                    offset: Offset(1, 2),
-                  ),
-                ],
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
-              ),
-              width: 60,
-              height: 60,
-              child: GestureDetector(
-                child: FractionallySizedBox(
-                  widthFactor: 0.8,
-                  heightFactor: 0.8,
-                  child: Image.asset(
-                    'assets/Frame_5005.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                onTap: () {},
-              ),
-            ),
           ),
         ),
       ],
@@ -497,86 +469,6 @@ class SBox extends StatelessWidget {
   }
 }
 
-class BottomSheetExample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Bottom Sheet Example')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
-                ),
-              ),
-              builder: (BuildContext context) {
-                return DraggableScrollableSheet(
-                  expand: false,
-                  initialChildSize: 0.5, // 초기 크기 (화면 높이의 50%)
-                  minChildSize: 0.5, // 최소 크기 (화면 높이의 30%)
-                  maxChildSize: 1, // 최대 크기 (화면 높이의 80%)
-                  builder: (BuildContext context, ScrollController scrollController) {
-                    return SingleChildScrollView(
-                      controller: scrollController,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onVerticalDragUpdate: (details) {
-                                scrollController.position.jumpTo(
-                                  scrollController.position.pixels - details.primaryDelta!,
-                                );
-                              },
-                              child: Container(
-                                height: 30,
-                                alignment: Alignment.center,
-                                child: Container(
-                                  width: 40,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '즐겨찾기',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            ListTile(
-                              title: Text('최근 목적지'),
-                              trailing: Icon(Icons.arrow_forward_ios),
-                            ),
-                            Divider(),
-                            for (var i = 0; i < 10; i++)
-                              ListTile(
-                                title: Text('SKT 타워'),
-                                trailing: Icon(Icons.location_pin),
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-          child: Text('Show Bottom Sheet'),
-        ),
-      ),
-    );
-  }
-}
-
 class HorizontalScrollableCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -651,6 +543,43 @@ class HorizontalScrollableCards extends StatelessWidget {
           Text(
             toll,
             style: TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Map App Example')),
+      body: Stack(
+        children: [
+          // 지도와 같은 메인 콘텐츠
+          Container(
+            color: Colors.green[200],
+            child: Center(child: TextButton(child:Text('Text'),onPressed: (){print('hi');},)),
+          ),
+          DraggableScrollableSheet(
+            initialChildSize: 0.3, // 초기 시트 크기 (30% 화면 높이)
+            minChildSize: 0.1, // 최소 시트 크기
+            maxChildSize: 0.7, // 최대 시트 크기
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                color: Colors.white,
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: 25,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text('Item $index'),
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
