@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'dart:convert';
 import 'apiTest.dart';
 import 'setting.dart';
 import 'selectWarnings.dart';
 import 'home.dart';
 import 'map_screen.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'agreeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // NaverMap SDK 초기화 및 clientId 설정
-  // await NaverMapSdk.instance.initialize(clientId: 'djww0m5kpg');
+  await NaverMapSdk.instance.initialize(clientId: 'djww0m5kpg');
 
   // 상태 표시줄 스타일 설정
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
