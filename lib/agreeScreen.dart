@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'setting.dart';
 
 class agreeScreen extends StatefulWidget {
-  const agreeScreen({super.key});
-
+  const agreeScreen({super.key,});
   @override
   State<agreeScreen> createState() => _agreeScreenState();
 }
@@ -15,6 +14,13 @@ class _agreeScreenState extends State<agreeScreen> {
   bool _agree4 = false;
   bool _agree5 = false;
   bool _all = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +92,7 @@ class _agreeScreenState extends State<agreeScreen> {
                   onChanged: (bool? value) {
                     setState(() {
                       _agree1 = value ?? false;
-                      _all =
-                          _agree1 && _agree2 && _agree3 && _agree4 && _agree5;
+                      _all = _agree1 && _agree2 && _agree3 && _agree4 && _agree5;
                     });
                   },
                 ),
@@ -183,7 +188,7 @@ class _agreeScreenState extends State<agreeScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (_all == true) {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => setting(),

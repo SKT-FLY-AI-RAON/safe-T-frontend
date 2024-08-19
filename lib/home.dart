@@ -276,12 +276,13 @@ class Home extends StatelessWidget {
                     margin: EdgeInsets.only(right: 15, left: 15),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (c) => agreeScreen(),
-                          ),
-                        );
+                        // 추가 처리 필요
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => agreeScreen(),
+                            ),
+                          );
                       },
                       child: ListTile(
                         title: Text('SAFT-T',
