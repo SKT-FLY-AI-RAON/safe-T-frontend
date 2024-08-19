@@ -248,7 +248,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               child: Image.asset(
                 'assets/obd_connection_red_button.png', // OBD 연결 이미지 경로
                 width: 70,
-                height: 70,
+                height: 70 ,
               ),
             ),
           ),
@@ -297,8 +297,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               },
               child: Image.asset(
                 'assets/navigation_current_location_button.png', // 현재 위치 버튼 이미지 경로
-                width:  ,
-                height: 100,
+                width: 50,
+                height: 50,
               ),
             ),
           ),
