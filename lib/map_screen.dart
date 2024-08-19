@@ -17,10 +17,14 @@ class _MapScreenState extends State<MapScreen> {
   late Stream<Position> _positionStream;
   StreamSubscription<Position>? _positionSubscription;
 
+  double _currentSpeed = 0.0;
+  TimeOfDay _currentTime = TimeOfDay.now();
+
   @override
   void initState() {
     super.initState();
     _requestLocationPermission();
+    _startTimer();
   }
 
   Future<void> _requestLocationPermission() async {
@@ -63,6 +67,7 @@ class _MapScreenState extends State<MapScreen> {
 
     _positionSubscription = _positionStream.listen((Position position) {
       _updateLocation(position);
+      _updateSpeed(position);
     });
   }
 
@@ -92,28 +97,104 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
+  void _updateSpeed(Position position) {
+    setState(() {
+      _currentSpeed = position.speed * 3.6; // m/s to km/h 변환
+    });
+  }
+
+  void _startTimer() {
+    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        _currentTime = TimeOfDay.now();
+      });
+    });
+  }
+
   @override
   void dispose() {
     _positionSubscription?.cancel(); // 스트림 구독 취소
     super.dispose();
   }
 
+  void _onShieldPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const OtherScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NaverMap(
-        options: const NaverMapViewOptions(
-          initialCameraPosition: NCameraPosition(
-            target: NLatLng(37.5665, 126.9780), // 서울 시청
-            zoom: 10,
+      body: Stack(
+        children: [
+          NaverMap(
+            options: const NaverMapViewOptions(
+              initialCameraPosition: NCameraPosition(
+                target: NLatLng(37.5665, 126.9780), // 서울 시청
+                zoom: 10,
+              ),
+            ),
+            onMapReady: (controller) {
+              _mapController = controller;
+              if (_locationPermissionGranted) {
+                _startLocationUpdates();
+              }
+            },
           ),
-        ),
-        onMapReady: (controller) {
-          _mapController = controller;
-          if (_locationPermissionGranted) {
-            _startLocationUpdates();
-          }
-        },
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.speed),
+                  onPressed: () {},
+                ),
+                Text(
+                  '${_currentSpeed.toStringAsFixed(1)} km/h',
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                SizedBox(width: 20),
+                Text(
+                  _formatTime(_currentTime),
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: FloatingActionButton(
+              onPressed: _onShieldPressed,
+              child: Icon(Icons.shield),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatTime(TimeOfDay time) {
+    final now = DateTime.now();
+    final formattedTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return '${time.hourOfPeriod}:${time.minute.toString().padLeft(2, '0')} ${time.period == DayPeriod.am ? 'AM' : 'PM'}';
+  }
+}
+
+class OtherScreen extends StatelessWidget {
+  const OtherScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('OBD 연결 화면'),
+      ),
+      body: const Center(
+        child: Text('OBD 연결화면입니다.'),
       ),
     );
   }

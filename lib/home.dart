@@ -45,6 +45,32 @@ class Home extends StatelessWidget {
                       height: double.infinity,
                       child: Row(
                         children: [
+                          Expanded(
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  // 1번 박스
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0,
+                                          right: 4,
+                                          top: 10,
+                                          bottom: 4),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // 1번 박스 클릭 시 MapScreen으로 이동
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                              const MapScreen(),
+                                            ),
+                                          );
+                                        },
+
+                                      ),
+                                    ),
                           Flexible(
                             flex: 15,
                             child: Padding(
