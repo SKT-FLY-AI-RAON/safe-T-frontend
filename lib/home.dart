@@ -3,7 +3,7 @@ import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
 import 'mqtt/mqtt_publisher_test_screen.dart';
 import 'map_screen.dart';
-import 'mqtt/mqtt_subscriber_test_screen.dart'; // map_screen.dart 파일을 임포트합니다.
+import 'mqtt/mqtt_subscriber_test_screen.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -14,22 +14,14 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-          // 배경 이미지
-          Scaffold(
-            backgroundColor: Colors.white,
-            // body: Image.asset(
-            //   'assets/home.png',
-            //   width: double.infinity,
-            //   height: double.infinity,
-            //   fit: BoxFit.cover,
-            // ),
-          ),
-
+        // 배경 이미지
+        Scaffold(
+          backgroundColor: Colors.white,
+        ),
         SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Color(0xFFF5F5FA),
-            //(0xFFEEEEF3),
             body: Column(
               children: [
                 // 상단바 구현
@@ -37,8 +29,7 @@ class Home extends StatelessWidget {
                   flex: 10,
                   child: Container(
                     decoration: BoxDecoration(
-                    //     border: Border.all(),
-                        color:Colors.white
+                      color: Colors.white,
                     ),
                     child: SizedBox(
                       width: double.infinity,
@@ -46,31 +37,22 @@ class Home extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: SizedBox(
-                              child: Row(
-                                children: [
-                                  // 1번 박스
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 15.0,
-                                          right: 4,
-                                          top: 10,
-                                          bottom: 4),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // 1번 박스 클릭 시 MapScreen으로 이동
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                              const MapScreen(),
-                                            ),
-                                          );
-                                        },
-
-                                      ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 15.0, right: 4, top: 10, bottom: 4),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                      const MapScreen(),
                                     ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                           Flexible(
                             flex: 15,
                             child: Padding(
@@ -82,78 +64,39 @@ class Home extends StatelessWidget {
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 20.0),
-                                  // 패딩 조절
                                   hintText: '어디로 갈까요?',
                                   hintStyle: TextStyle(
                                     color: Color(0x98D0D0D0),
                                   ),
                                   suffixIcon: Icon(Icons.mic),
                                   suffixIconColor: Colors.blueAccent,
-                                  // border: OutlineInputBorder(
-                                  //     borderSide: BorderSide(color: Colors.black),
-                                  //     borderRadius: BorderRadius.circular(50)),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
                                     borderSide: BorderSide(
-                                        color: Colors.blue), // 비활성화 상태의 테두리 색상
+                                        color: Colors.blue),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
                                     borderSide: BorderSide(
-                                        color: Colors.blue), // 포커스 상태의 테두리 색상
+                                        color: Colors.blue),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          // 화살표 버튼
                           Flexible(
                             flex: 3,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Color(0xFFFFFFFF),
-
                                 border: Border.all(color: Color(0x98505050)),
-                                shape: BoxShape.circle, // 아이콘을 원형으로 감싸기 위해
+                                shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.1),
                                     spreadRadius: 0,
                                     blurRadius: 2,
-                                    offset: Offset(3, 3), // 그림자의 위치 조정
-
-                          Expanded(
-                            child: SizedBox(
-                              child: Row(
-                                children: [
-                                  // 3번 박스
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (c) =>
-                                                MqttSubscriberTestScreen(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  // 4번 박스
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (c) =>
-                                                MqttTestScreen(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-
+                                    offset: Offset(3, 3),
                                   ),
                                 ],
                               ),
@@ -177,11 +120,10 @@ class Home extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: Container(
-                    width: double.infinity, height: double.infinity,
-                    // color: Colors.transparent,
+                    width: double.infinity,
+                    height: double.infinity,
                     decoration: BoxDecoration(
-                        // border: Border.all(),
-                        color:Colors.white
+                      color: Colors.white,
                     ),
                     child: Row(
                       children: [
@@ -196,8 +138,6 @@ class Home extends StatelessWidget {
                               Icon(Icons.business,
                                   color: Colors.grey, size: 20),
                               Text('회사', style: TextStyle(color: Colors.grey)),
-                              SizedBox(),
-                              SizedBox(),
                               SizedBox(),
                             ],
                           ),
@@ -226,9 +166,6 @@ class Home extends StatelessWidget {
                 Flexible(
                   flex: 38,
                   child: Container(
-                    decoration: BoxDecoration(
-                        // border: Border.all(),
-                    ),
                     child: Column(
                       children: [
                         Expanded(
@@ -345,7 +282,6 @@ class Home extends StatelessWidget {
                         );
                       },
                       child: ListTile(
-                        // contentPadding: EdgeInsets.zero,
                         title: Text('SAFT-T',
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
@@ -361,48 +297,39 @@ class Home extends StatelessWidget {
                   flex: 35,
                   child: Container(
                     decoration: BoxDecoration(
-                        // border: Border.all(),
-                        color:Colors.transparent
+                        color: Colors.transparent
                     ),
-                    child:Column(
-                      children:[
+                    child: Column(
+                      children: [
                         Expanded(
                           child: Container(
-                            margin:EdgeInsets.all(10),
-                            // decoration: BoxDecoration(
-                            //     border: Border.all(),
-                            //     color:Colors.transparent
-                            // ),
+                            margin: EdgeInsets.all(10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SBox(picture:'assets/rent.png'),
-                                SBox(picture:'assets/charge.png'),
-                                SBox(picture:'assets/bike.png'),
-                                SBox(picture:'assets/buycar.png'),
+                                SBox(picture: 'assets/rent.png'),
+                                SBox(picture: 'assets/charge.png'),
+                                SBox(picture: 'assets/bike.png'),
+                                SBox(picture: 'assets/buycar.png'),
                               ],
                             ),
                           ),
                         ),
                         Expanded(
                           child: Container(
-                            margin:EdgeInsets.all(10),
-                            // decoration: BoxDecoration(
-                            //     border: Border.all(),
-                            //     color:Colors.transparent
-                            // ),
+                            margin: EdgeInsets.all(10),
                             child: Row(
                               children: [
-                                SBox(picture:'assets/airportbus.png'),
-                                SBox(picture:'assets/around.png'),
-                                SBox(picture:'assets/subway.png'),
-                                SBox(picture:'assets/taxi.png'),
+                                SBox(picture: 'assets/airportbus.png'),
+                                SBox(picture: 'assets/around.png'),
+                                SBox(picture: 'assets/subway.png'),
+                                SBox(picture: 'assets/taxi.png'),
                               ],
                             ),
                           ),
                         ),
-                      ]
-                    )
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -413,44 +340,55 @@ class Home extends StatelessWidget {
               selectedItemColor: Colors.black,
               unselectedItemColor: Colors.grey,
               items: [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.home), label: '홈'),
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.location_on), label: 'T지금'),
                 BottomNavigationBarItem(
-                    icon: SizedBox(height:24,width:24,child:Image.asset('assets/carlife.png')), label: '카라이프'),
+                    icon: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Image.asset('assets/carlife.png')),
+                    label: '카라이프'),
                 BottomNavigationBarItem(
-                    icon: SizedBox(height:24,width:24,child:Image.asset('assets/daeri.png')), label: '대리운전'),
+                    icon: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Image.asset('assets/daeri.png')),
+                    label: '대리운전'),
                 BottomNavigationBarItem(
-                    icon: SizedBox(height:24,width:24,child:Image.asset('assets/entire.png')), label: '전체'),
+                    icon: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: Image.asset('assets/entire.png')),
+                    label: '전체'),
               ],
             ),
             floatingActionButton: Container(
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2), // 그림자 색상
-                    spreadRadius: 1, // 그림자 확산 정도
-                    blurRadius: 3, // 그림자 흐림 정도
-                    offset: Offset(1, 2), // 그림자의 위치 (x, y)
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(1, 2),
                   ),
                 ],
-                color:Colors.white,
-                shape:BoxShape.circle,
-                border:Border.all(width:2.5,color:Color(0xFFE0A4A4)),
-                // borderRadius: BorderRadius.circular(30),
-              ),width:60,height:60,
-              child:GestureDetector(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
+              ),
+              width: 60,
+              height: 60,
+              child: GestureDetector(
                 child: FractionallySizedBox(
-                  widthFactor: 0.8, // 부모의 80% 크기
-                  heightFactor: 0.8, // 부모의 80% 크기
+                  widthFactor: 0.8,
+                  heightFactor: 0.8,
                   child: Image.asset(
-                    'assets/Frame_5005.png', // 여기에 이미지를 넣으세요
+                    'assets/Frame_5005.png',
                     fit: BoxFit.contain,
                   ),
-                ),onTap: (){
-
-                },
+                ),
+                onTap: () {},
               ),
             ),
           ),
@@ -461,23 +399,24 @@ class Home extends StatelessWidget {
 }
 
 class Box extends StatelessWidget {
-  const Box(
-      {super.key,
-      this.tt,
-      this.stt,
-      this.img,
-      this.page,
-      this.col,
-      this.fontcol,
-      this.subcol});
+  const Box({
+    super.key,
+    this.tt,
+    this.stt,
+    this.img,
+    this.page,
+    this.col,
+    this.fontcol,
+    this.subcol,
+  });
 
-  final tt;
-  final stt;
-  final img;
-  final page;
-  final col;
-  final subcol;
-  final fontcol;
+  final String? tt;
+  final String? stt;
+  final String? img;
+  final Widget? page;
+  final Color? col;
+  final int? subcol;
+  final Color? fontcol;
 
   @override
   Widget build(BuildContext context) {
@@ -485,16 +424,17 @@ class Box extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       padding: EdgeInsets.only(top: 15),
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(15), color: col),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: col,
+      ),
       child: GestureDetector(
         onTap: () {
-          // 1번 박스 클릭 시 MapScreen으로 이동
           if (page != null) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => page,
+                builder: (context) => page!,
               ),
             );
           } else {
@@ -504,27 +444,25 @@ class Box extends StatelessWidget {
         child: Stack(
           children: [
             ListTile(
-              // contentPadding: EdgeInsets.zero,
               title: Text(
-                tt,
+                tt!,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: fontcol,
                 ),
               ),
-              subtitle: Text(stt,
-                  style: TextStyle(fontSize: 14, color: Color(subcol))),
-              // trailing: Image.asset('assets/Frame_5005.png'),
+              subtitle: Text(stt!,
+                  style: TextStyle(fontSize: 14, color: Color(subcol!))),
             ),
             Positioned.fill(
               child: Align(
                 alignment: Alignment(1.0, 0.8),
                 child: FractionallySizedBox(
-                  widthFactor: 0.5, // 부모의 20% 크기
-                  heightFactor: 0.5, // 부모의 20% 크기
+                  widthFactor: 0.5,
+                  heightFactor: 0.5,
                   child: Image.asset(
-                    img, // 여기에 이미지를 넣으세요
+                    img!,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -538,19 +476,19 @@ class Box extends StatelessWidget {
 }
 
 class SBox extends StatelessWidget {
-  const SBox({super.key,this.picture});
-  final picture;
+  const SBox({super.key, this.picture});
+  final String? picture;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin:EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color:Colors.white,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Center(child: Image.asset(picture)),
+        child: Center(child: Image.asset(picture!)),
       ),
     );
   }
@@ -586,7 +524,6 @@ class BottomSheetExample extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 작대기 추가
                             GestureDetector(
                               onVerticalDragUpdate: (details) {
                                 scrollController.position.jumpTo(
@@ -608,54 +545,19 @@ class BottomSheetExample extends StatelessWidget {
                             ),
                             Text(
                               '즐겨찾기',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             ListTile(
                               title: Text('최근 목적지'),
                               trailing: Icon(Icons.arrow_forward_ios),
                             ),
                             Divider(),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            ListTile(
-                              title: Text('SKT 타워'),
-                              trailing: Icon(Icons.location_pin),
-                            ),
-                            // 여기에 추가 항목을 넣을 수 있습니다.
+                            for (var i = 0; i < 10; i++)
+                              ListTile(
+                                title: Text('SKT 타워'),
+                                trailing: Icon(Icons.location_pin),
+                              ),
                           ],
                         ),
                       ),
@@ -683,14 +585,13 @@ class HorizontalScrollableCards extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              // 지도 같은 다른 콘텐츠가 들어갈 수 있는 영역
               color: Colors.grey[300],
               child: Center(child: Text('지도 영역')),
             ),
           ),
           Container(
             padding: EdgeInsets.all(10.0),
-            height: 200.0, // 카드들의 높이 설정
+            height: 200.0,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
@@ -699,15 +600,6 @@ class HorizontalScrollableCards extends StatelessWidget {
                 buildCard('무료도로', '44분', '오후 4:33 도착', '13km', '통행료 없음'),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            // child: ElevatedButton(
-            //   onPressed: () {
-            //     // 안내시작 버튼 동작
-            //   },
-            //   child: Text('안내시작'),
-            // ),
           ),
         ],
       ),
@@ -736,7 +628,8 @@ class HorizontalScrollableCards extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.blue, fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 8.0),
           Text(
@@ -756,14 +649,6 @@ class HorizontalScrollableCards extends StatelessWidget {
             toll,
             style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
-          Spacer(),
-          // Align(
-          //   alignment: Alignment.centerRight,
-          //   child: TextButton(
-          //     onPressed: () {},
-          //     child: Text('상세'),
-          //   ),
-          // ),
         ],
       ),
     );
