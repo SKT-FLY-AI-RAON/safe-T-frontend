@@ -323,8 +323,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
             trailing: device == selectedDevice
                 ? Icon(Icons.bluetooth_connected, color: Colors.blue)
                 : null,
-            onTap: () {
-              connectToDevice(device);
+            onTap: () async {
+              await connectToDevice(device);
             },
           );
         },

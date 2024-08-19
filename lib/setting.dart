@@ -26,20 +26,18 @@ class setting extends StatelessWidget {
                   ),
                 ),
                 child: ListTile(
+                  onTap:(){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => selectWarning()
+                      ),
+                    );
+                  },
                   // contentPadding: EdgeInsets.zero,
                   title: Text('페달 블랙박스 영상', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   subtitle: Text('주행 중 녹화된 페달 블랙박스', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                  trailing: IconButton(
-                    icon:Icon(Icons.arrow_forward_ios),
-                    onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (c) => selectWarning()
-                        ),
-                      );
-                    },
-                  ),
+                  trailing: Icon(Icons.arrow_forward_ios),
                 ),
               ),
             ],
