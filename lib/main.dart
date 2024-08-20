@@ -10,6 +10,7 @@ import 'home.dart';
 import 'map_screen.dart';
 import 'agreeScreen.dart';
 import 'streaming.dart';
+import 'tutorial.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

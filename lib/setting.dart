@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/selectWarnings.dart';
+import 'tutorial.dart';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -48,6 +49,36 @@ class Setting extends StatelessWidget {
             ),
 
             // 경고 방식 선택
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
+                ),
+              ),
+              child: ListTile(
+                contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => tutorial(),
+                    ),
+                  );
+                },
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0), // 텍스트 사이 공백 추가
+                  child: Text(
+                    '튜토리얼',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                subtitle: Text(
+                  '블랙 박스 설치 위치\n튜토리얼을 확인할 수 있습니다.',
+                  style: TextStyle(fontSize: 15, color: Color(0xFF717274)),
+                ),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                 border: Border(
