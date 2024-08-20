@@ -4,6 +4,7 @@ import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
 import 'mqtt/mqtt_publisher_test_screen.dart';
 import 'map_screen.dart';
+import 'streaming.dart';
 import 'mqtt/mqtt_subscriber_test_screen.dart';
 
 class Home extends StatelessWidget {
@@ -227,7 +228,7 @@ class Home extends StatelessWidget {
                                         top: 5,
                                         bottom: 10),
                                     child: Box(
-                                      page: HorizontalScrollableCards(),
+                                      page: MjpegStreamScreen(),
                                       tt: '주차',
                                       stt: '주차요금 할인받고 간편결제',
                                       img: 'assets/park.png',
@@ -310,7 +311,15 @@ class Home extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SBox(picture: 'assets/rent.png'),
+                                // GestureDetector(onTap:(){Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     // builder: (c) => VideoStreamScreen(),
+                                //   ),
+                                // );},
+                                //     child:
+                                    SBox(picture: 'assets/rent.png'),
+                                // ),
                                 SBox(picture: 'assets/charge.png'),
                                 SBox(picture: 'assets/bike.png'),
                                 SBox(picture: 'assets/buycar.png'),
