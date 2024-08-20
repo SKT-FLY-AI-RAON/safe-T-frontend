@@ -282,7 +282,7 @@ class Home extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (c) => agreeScreen(),
+                              builder: (c) => AgreeScreen(),
                             ),
                           );
                       },
