@@ -55,13 +55,30 @@ class _SelectWarningState extends State<SelectWarning> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        'assets/warning-1.png',
-                        width: 200,
-                        height: 300,
-                        fit: BoxFit.fill,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3), // 약한 그림자 색상
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 0), // 그림자의 오프셋
+                          ),
+                        ],
+                        // border: Border.all( // 검정색 스트로크 추가
+                        //   color: Colors.black, // 테두리 색상
+                        //   width: 1.0, // 테두리 두께
+                        // ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: Image.asset(
+                          'assets/warning-1.png',
+                          width: 200,
+                          height: 350,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ],
@@ -99,13 +116,30 @@ class _SelectWarningState extends State<SelectWarning> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        'assets/warning-2.png',
-                        width: 200,
-                        height: 300,
-                        fit: BoxFit.fill,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3), // 약한 그림자 색상
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 0), // 그림자의 오프셋
+                          ),
+                        ],
+                        // border: Border.all( // 검정색 스트로크 추가
+                        //   color: Colors.black, // 테두리 색상
+                        //   width: 1.0, // 테두리 두께
+                        // ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: Image.asset(
+                          'assets/warning-2.png',
+                          width: 200,
+                          height: 350,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ],
@@ -125,6 +159,8 @@ class _SelectWarningState extends State<SelectWarning> {
           ),
         ],
       ),
+
+
 
 
 
