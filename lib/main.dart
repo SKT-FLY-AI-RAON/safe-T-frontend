@@ -10,6 +10,7 @@ import 'home.dart';
 import 'map_screen.dart';
 import 'agreeScreen.dart';
 import 'streaming.dart';
+import 'tutorial.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +26,7 @@ void main() async {
 
   runApp(
     MaterialApp(
-      home: Home(),  // Home 위젯으로 시작
+      home: PageViewExample(),  // Home 위젯으로 시작
     ),
   );
 }
