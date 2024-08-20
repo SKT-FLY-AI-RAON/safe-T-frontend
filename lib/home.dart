@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:raon_frontend/agreeScreen.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
-import 'mqtt/mqtt_publisher_test_screen.dart';
+import 'mqtt/MqttTestScreen.dart';
+import 'mqtt/mqttPublisherTestScreen.dart';
 import 'map_screen.dart';
 import 'streaming.dart';
-import 'mqtt/mqtt_subscriber_test_screen.dart';
+import 'mqtt/mqttSubscriberTestScreen.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'mqtt_publisher.dart'; // MQTT 발행 기능이 포함된 파일
+import 'mqttPublisher.dart'; // MQTT 발행 기능이 포함된 파일
 
-class MqttTestScreen extends StatefulWidget {
+class MqttPublisherTestScreen extends StatefulWidget {
   @override
   _MqttTestScreenState createState() => _MqttTestScreenState();
 }
 
-class _MqttTestScreenState extends State<MqttTestScreen> {
+class _MqttTestScreenState extends State<MqttPublisherTestScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   String _statusMessage = "";
