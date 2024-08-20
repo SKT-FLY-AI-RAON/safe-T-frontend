@@ -145,7 +145,7 @@ class _AgreeScreenState extends State<AgreeScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => setting(),
+                            builder: (context) => Setting(),
                           ),
                         );
                       }
@@ -165,8 +165,6 @@ class _AgreeScreenState extends State<AgreeScreen> {
               ),
             ),
           ),
-
-
         ],
       ),
     );
