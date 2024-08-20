@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PageViewExample extends StatefulWidget {
+class tutorial extends StatefulWidget {
   @override
-  _PageViewExampleState createState() => _PageViewExampleState();
+  _tutorialState createState() => _tutorialState();
 }
 
-class _PageViewExampleState extends State<PageViewExample> {
+class _tutorialState extends State<tutorial> {
   PageController _pageController = PageController();
 
   @override
