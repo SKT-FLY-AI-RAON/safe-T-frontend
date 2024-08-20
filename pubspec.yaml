@@ -37,6 +37,7 @@ dependencies:
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
 
+
   #yongug dependencies added
   flutter_naver_map: ^1.2.3
   geolocator: ^10.0.1

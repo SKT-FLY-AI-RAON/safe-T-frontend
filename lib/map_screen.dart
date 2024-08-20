@@ -350,6 +350,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+
                 Positioned(
                   top: 20,
                   right: 0,
