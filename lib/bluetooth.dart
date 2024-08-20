@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:csv/csv.dart';
 
-import 'mqtt/mqtt_publisher.dart';
+import 'mqtt/mqttPublisher.dart';
 
 class BluetoothScreen extends StatefulWidget {
   @override
