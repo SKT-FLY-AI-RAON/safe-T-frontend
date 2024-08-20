@@ -263,56 +263,56 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               ),
               Positioned(
                 top: 20,
-                left: 10,
+                left:-10,
                 child: Image.asset(
-                  'assets/green_destination.png', // 추가한 이미지 경로
+                  'assets/green_destination_2.png', // 추가한 이미지 경로
                   width: 240, // 이미지 크기 조정
                   height: 100,
                 ),
               ),
               Positioned(
-                bottom: 150,
-                right: 20,
+                bottom: 180,
+                right: 10,
                 child: GestureDetector(
                   onTap: _onShieldPressed,
                   child: Image.asset(
-                    'assets/obd_connection_red_button.png', // OBD 연결 이미지 경로
-                    width: 70,
-                    height: 70,
+                    'assets/obd_connection_red_button_2.png', // OBD 연결 이미지 경로
+                    width: 80,
+                    height: 80,
                   ),
                 ),
               ),
               Positioned(
                 bottom: 100,
-                right: 20,
+                right: 10,
                 child: GestureDetector(
                   onTap: () {
                     // 마이크 버튼 클릭시 동작할 로직 추가
                   },
                   child: Image.asset(
-                    'assets/blue_nugu_mike_button.png', // 마이크 버튼 이미지 경로
-                    width: 56,
-                    height: 56,
+                    'assets/blue_nugu_mike_button_2.png', // 마이크 버튼 이미지 경로
+                    width: 80,
+                    height: 80,
                   ),
                 ),
               ),
               Positioned(
                 bottom: 100,
-                left: 20,
+                left: 5,
                 child: GestureDetector(
                   onTap: () {
                     // 좌측 화살표 버튼 클릭시 동작할 로직 추가
                   },
                   child: Image.asset(
-                    'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
-                    width: 56,
-                    height: 56,
+                    'assets/black_arrow_button_2.png', // 화살표 버튼 이미지 경로
+                    width: 80,
+                    height: 80,
                   ),
                 ),
               ),
               Positioned(
                 top: 20,
-                right: 10,
+                right: 0,
                 child: GestureDetector(
                   onTap: () {
                     // 현재 위치로 이동하는 로직
@@ -326,7 +326,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     }
                   },
                   child: Image.asset(
-                    'assets/navigation_current_location_button.png',
+                    'assets/navigation_current_location_button_2.png',
                     // 현재 위치 버튼 이미지 경로
                     width: 100,
                     height: 100,
