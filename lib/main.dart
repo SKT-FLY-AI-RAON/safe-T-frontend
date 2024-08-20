@@ -26,7 +26,7 @@ void main() async {
 
   runApp(
     MaterialApp(
-      home: PageViewExample(),  // Home 위젯으로 시작
+      home: Home(),  // Home 위젯으로 시작
     ),
   );
 }
