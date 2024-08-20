@@ -9,6 +9,7 @@ import 'selectWarnings.dart';
 import 'home.dart';
 import 'map_screen.dart';
 import 'agreeScreen.dart';
+import 'streaming.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
