@@ -203,13 +203,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           _mapController.deleteOverlay(NOverlayInfo(type: NOverlayType.pathOverlay, id: 'custom_path'));
         }
 
-        // _combinedPathOverlay = NPathOverlay(
-        //   id: 'custom_path',
-        //   coords: customPathPoints,
-        //   color: Colors.blue, // 경로 색상
-        //   width: 5, //경로 두께
-        // );
-        // _mapController.addOverlay(_combinedPathOverlay!);
         final polygonOverlay = NPolygonOverlay(
           id: 'custom_polygon',
           coords: customPathPoints,  // 다각형의 경계 좌표들
@@ -218,7 +211,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           outlineWidth: 20,  // 외곽선 두께
         );
 
-// 지도에 다각형 오버레이 추가
+        // 지도에 다각형 오버레이 추가
         _mapController.addOverlay(polygonOverlay);
       });
     }
@@ -321,9 +314,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         Navigator.pop(context);
                       },
                       child: Image.asset(
-                        'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
-                        width: 56,
-                        height: 56,
+                        'assets/load_map.png', // 화살표 버튼 이미지 경로
+                        width: 65,
+                        height: 65,
                       ),
                     ),
                   ),
@@ -352,7 +345,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                           widthFactor: 0.8,
                           heightFactor: 0.8,
                           child: Image.asset(
-                            'assets/Frame_5005.png',
+                            'assets/red_button_new.png',
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -439,14 +432,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 Positioned(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black26,
@@ -458,25 +450,61 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Refresh Icon
                         IconButton(
                           icon: Icon(Icons.refresh, color: Colors.black),
+                          iconSize: 30,
                           onPressed: () {
                             // 여기에 새로고침 로직 추가
                           },
                         ),
+
+                        // Speed and Time Display
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
+                            // Speed Display
                             Text(
-                              '${_currentSpeed.toStringAsFixed(1)} km',
-                              style: TextStyle(fontSize: 20, color: Colors.black),
+                              '${_currentSpeed.toStringAsFixed(0)}',
+                              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.black),
                             ),
-                            SizedBox(width: 20),
                             Text(
-                              _formatTime(_currentTime),
-                              style: TextStyle(fontSize: 20, color: Colors.black),
+                              ' km',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                            ),
+                            SizedBox(width: 40),
+
+                            // Time Display using RichText
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  // Period Text (오전/오후)
+                                  TextSpan(
+                                    text: _getPeriod(_currentTime), // Returns "오전" or "오후"
+                                    style: TextStyle(
+                                      fontSize: 20,  // Smaller font size for period
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(text: ' '),  // Add a space between the period and time
+
+                                  // Time Text (시간)
+                                  TextSpan(
+                                    text: _getFormattedTime(_currentTime), // Returns "8:33" or similar
+                                    style: TextStyle(
+                                      fontSize: 35,  // Larger font size for the time
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
+
+                        // More Options Icon
                         IconButton(
                           icon: Icon(Icons.more_vert, color: Colors.black),
                           onPressed: () {
@@ -495,26 +523,29 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 20,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      // 현재 위치로 이동하는 로직
-                      if (_userLocationMarker != null) {
-                        _mapController.updateCamera(
-                          NCameraUpdate.scrollAndZoomTo(
-                            target: _userLocationMarker!.position,
-                            zoom: 15, // 현재 줌 레벨로 설정
-                          ),
-                        );
-                      }
-                    },
-                    child: Image.asset(
-                      'assets/navigation_current_location_button.png',
-                      // 현재 위치 버튼 이미지 경로
-                      width: 100,
-                      height: 100,
+                Align(
+                  alignment: Alignment(0.95,-0.95),
+                  child: Positioned(
+                    top: 20,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        // 현재 위치로 이동하는 로직
+                        if (_userLocationMarker != null) {
+                          _mapController.updateCamera(
+                            NCameraUpdate.scrollAndZoomTo(
+                              target: _userLocationMarker!.position,
+                              zoom: 15, // 현재 줌 레벨로 설정
+                            ),
+                          );
+                        }
+                      },
+                      child: Image.asset(
+                        'assets/my_location.png',
+                        // 현재 위치 버튼 이미지 경로
+                        width: 65,
+                        height: 65,
+                      ),
                     ),
                   ),
                 ),
@@ -558,11 +589,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     );
   }
 
-  String _formatTime(TimeOfDay time) {
-    final now = DateTime.now();
-    final formattedTime =
-    DateTime(now.year, now.month, now.day, time.hour, time.minute);
-    return '${time.hourOfPeriod}:${time.minute.toString().padLeft(2, '0')} ${time.period == DayPeriod.am ? 'AM' : 'PM'}';
+  String _getPeriod(TimeOfDay time) {
+    return time.period == DayPeriod.am ? '오전' : '오후';
+  }
+
+  String _getFormattedTime(TimeOfDay time) {
+    int hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    return '$hour:${time.minute.toString().padLeft(2, '0')}';
   }
 }
 
