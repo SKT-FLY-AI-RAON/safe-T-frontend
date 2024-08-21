@@ -21,14 +21,14 @@ class Setting extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50.0),
+              padding: const EdgeInsets.symmetric(vertical: 30.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
                 children: [
                   Image.asset(
                     'assets/shield.png', // 이미지 파일 이름과 경로
-                    width: 200, // 원하는 너비 설정
-                    height: 200, // 원하는 높이 설정
+                    width: MediaQuery.of(context).size.width, // 원하는 너비 설정
+                    height: MediaQuery.of(context).size.height * 0.2, // 원하는 높이 설정
                     fit: BoxFit.contain, // 이미지를 비율에 맞게 조절
                   ),
                   SizedBox(height: 20), // 이미지와 텍스트 사이의 여백
@@ -51,78 +51,83 @@ class Setting extends StatelessWidget {
             ),
 
             // 튜토리얼 화면으로 넘어가기
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
-                ),
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (c) => TutorialScreen(),
+            Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
                     ),
-                  );
-                },
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0), // 텍스트 사이 공백 추가
-                  child: Text(
-                    '튜토리얼',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (c) => TutorialScreen(),
+                        ),
+                      );
+                    },
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0), // 텍스트 사이 공백 추가
+                      child: Text(
+                        '튜토리얼',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    subtitle: Text(
+                      '블랙 박스 설치 위치\n튜토리얼을 확인할 수 있습니다.',
+                      style: TextStyle(fontSize: 15, color: Color(0xFF717274)),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios),
                   ),
                 ),
-                subtitle: Text(
-                  '블랙 박스 설치 위치\n튜토리얼을 확인할 수 있습니다.',
-                  style: TextStyle(fontSize: 15, color: Color(0xFF717274)),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
+                    ),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
+                    onTap: () async {
+                      var option;
+                      try{
+                        var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
+                        if (response.statusCode == 200) {
+                          var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
+                          option = decodedresponse['data']['warningOption'];
+                        } else {
+                        }
+                      }
+                      catch (e) {
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (c) => SelectWarning(selected: option, Id: 1),
+                        ),
+                      );
+                    },
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0), // 텍스트 사이 공백 추가
+                      child: Text(
+                        '경고 방식 선택',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    subtitle: Text(
+                      '주행 중 페달 오조작 상황 발생 시\n내비에서 경고하는 방식을 선택할 수 있습니다.',
+                      style: TextStyle(fontSize: 15, color: Color(0xFF717274)),
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                  ),
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
-              ),
+              ],
             ),
             // 경고 선택 방식 화면으로 넘어가기
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Color(0x2D808080)), // 아래쪽 테두리
-                ),
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
-                onTap: () async{
-                  var option;
-                  try{
-                    var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
-                    if (response.statusCode == 200) {
-                      var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
-                      option = decodedresponse['data']['warningOption'];
-                    } else {
-                    }
-                  }
-                  catch (e) {
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (c) => SelectWarning(selected: option, Id: 1),
-                    ),
-                  );
-                },
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0), // 텍스트 사이 공백 추가
-                  child: Text(
-                    '경고 방식 선택',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                subtitle: Text(
-                  '주행 중 페달 오조작 상황 발생 시\n내비에서 경고하는 방식을 선택할 수 있습니다.',
-                  style: TextStyle(fontSize: 15, color: Color(0xFF717274)),
-                ),
-                trailing: Icon(Icons.arrow_forward_ios),
-              ),
-            ),
+
 
 
             // // 두 번째 설정 항목 추가 예시

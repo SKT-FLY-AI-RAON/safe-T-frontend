@@ -298,6 +298,30 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             floatingActionButton: Stack(
               children: [
                 Positioned(
+                    child: Align(
+                      alignment: Alignment(1, -0.9),
+                      child: GestureDetector(
+                        onTap: () {
+                          // 현재 위치로 이동하는 로직
+                          if (_userLocationMarker != null) {
+                            _mapController.updateCamera(
+                              NCameraUpdate.scrollAndZoomTo(
+                                target: _userLocationMarker!.position,
+                                zoom: 15, // 현재 줌 레벨로 설정
+                              ),
+                            );
+                          }
+                        },
+                        child: Image.asset(
+                          'assets/my_location.png',
+                          // 현재 위치 버튼 이미지 경로
+                          width: 65,
+                          height: 65,
+                        ),
+                      ),
+                    ),
+                  ),
+                Positioned(
                   child: Align(
                     alignment: Alignment(-0.8, 0.6),
                     child: FloatingActionButton(
@@ -520,32 +544,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   child: SizedBox(
                     child: Image.asset(fit:BoxFit.cover,
                       'assets/green_destination.png', // 추가한 이미지 경로
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment(0.95,-0.95),
-                  child: Positioned(
-                    top: 20,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        // 현재 위치로 이동하는 로직
-                        if (_userLocationMarker != null) {
-                          _mapController.updateCamera(
-                            NCameraUpdate.scrollAndZoomTo(
-                              target: _userLocationMarker!.position,
-                              zoom: 15, // 현재 줌 레벨로 설정
-                            ),
-                          );
-                        }
-                      },
-                      child: Image.asset(
-                        'assets/my_location.png',
-                        // 현재 위치 버튼 이미지 경로
-                        width: 65,
-                        height: 65,
-                      ),
                     ),
                   ),
                 ),
