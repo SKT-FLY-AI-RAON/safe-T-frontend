@@ -19,6 +19,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late NaverMapController _mapController;
   NMarker? _userLocationMarker;
+  NPathOverlay? _combinedPathOverlay;
   bool _locationPermissionGranted = false;
   late Stream<Position> _positionStream;
   StreamSubscription<Position>? _positionSubscription;
@@ -30,6 +31,69 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   bool _isPipMode = false; // PiP 모드 여부
   late AnimationController _alertController;
   final FlutterTts _flutterTts = FlutterTts();
+
+  // 경로를 구성하는 좌표들 (여러 경로를 합친 것)
+  List<NLatLng> customPathPoints = [
+    NLatLng(37.49258525, 126.92601052),
+    NLatLng(37.49248007, 126.92685168),
+    NLatLng(37.49526331, 126.92746432),
+    NLatLng(37.49716870, 126.92790337),
+    NLatLng(37.49969860, 126.92830516),
+    NLatLng(37.50018054, 126.92803238),
+    NLatLng(37.50046322, 126.92757926),
+    NLatLng(37.50063838, 126.92747467),
+    NLatLng(37.50081076, 126.92742886),
+    NLatLng(37.50147430, 126.92800634),
+    NLatLng(37.50212477, 126.92782019),
+    NLatLng(37.50236367, 126.92705794),
+    NLatLng(37.50279008, 126.92650695),
+    NLatLng(37.50276623, 126.92544312),
+    NLatLng(37.50428670, 126.92546867),
+    NLatLng(37.50554588, 126.92436477),
+    NLatLng(37.50589215, 126.92363755),
+    NLatLng(37.50637467, 126.92288922),
+    NLatLng(37.51179628, 126.92505054),
+    NLatLng(37.51292664, 126.92566636),
+    NLatLng(37.51471302, 126.92707141),
+    NLatLng(37.51707461, 126.92872047),
+    NLatLng(37.51733114, 126.92893288),
+    NLatLng(37.52295169, 126.93803402),
+    NLatLng(37.52588713, 126.94366517),
+    NLatLng(37.52956676, 126.95068070),
+    NLatLng(37.53168501, 126.95473415),
+    NLatLng(37.53272300, 126.95736607),
+    NLatLng(37.53317577, 126.96041790),
+    NLatLng(37.53320629, 126.96269506),
+    NLatLng(37.53397518, 126.96807139),
+    NLatLng(37.53458677, 126.96963348),
+    NLatLng(37.53666792, 126.97079468),
+    NLatLng(37.54045359, 126.97088158),
+    NLatLng(37.54161738, 126.97084899),
+    NLatLng(37.54204180, 126.97278161),
+    NLatLng(37.54509723, 126.97199577),
+    NLatLng(37.54906060, 126.97176822),
+    NLatLng(37.55303305, 126.97277456),
+    NLatLng(37.55483325, 126.97307669),
+    NLatLng(37.55624220, 126.97292756),
+    NLatLng(37.55736531, 126.97288654),
+    NLatLng(37.55926906, 126.97451422),
+    NLatLng(37.56017780, 126.97489449),
+    NLatLng(37.56054559, 126.97581415),
+    NLatLng(37.56390967, 126.97711479),
+    NLatLng(37.56495092, 126.97737313),
+    NLatLng(37.56683773, 126.97727751),
+    NLatLng(37.56868133, 126.97721784),
+    NLatLng(37.56892916, 126.97731189),
+    NLatLng(37.56904465, 126.97763810),
+    NLatLng(37.56879874, 126.98096432),
+    NLatLng(37.56858869, 126.98296516),
+    NLatLng(37.56812484, 126.98568599),
+    NLatLng(37.56807104, 126.98583333),
+    NLatLng(37.56704954, 126.98584399),
+    NLatLng(37.56617156, 126.98583175),
+    NLatLng(37.56610857, 126.98446514),
+    NLatLng(37.56657746, 126.98453752),
+  ];
 
   @override
   void initState() {
@@ -86,6 +150,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _positionSubscription = _positionStream.listen((Position position) {
       _updateLocation(position);
       _updateSpeed(position);
+      _updatePathOverlay(position);
 
       // 속도를 이용한 주행 이상 감지 예시
       if (_currentSpeed > 100) {
@@ -124,6 +189,50 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _currentSpeed = position.speed * 3.6; // m/s to km/h 변환
     });
+  }
+
+  // 경로 업데이트 함수 수정
+  void _updatePathOverlay(Position position) {
+    if (customPathPoints.isNotEmpty &&
+        _isCloseToPath(position, customPathPoints.first)) {
+      setState(() {
+        customPathPoints.removeAt(0); // 첫 번째 좌표 제거
+
+        // 기존 오버레이를 제거하고 새로 추가
+        if (_combinedPathOverlay != null) {
+          _mapController.deleteOverlay(NOverlayInfo(type: NOverlayType.pathOverlay, id: 'custom_path'));
+        }
+
+        // _combinedPathOverlay = NPathOverlay(
+        //   id: 'custom_path',
+        //   coords: customPathPoints,
+        //   color: Colors.blue, // 경로 색상
+        //   width: 5, //경로 두께
+        // );
+        // _mapController.addOverlay(_combinedPathOverlay!);
+        final polygonOverlay = NPolygonOverlay(
+          id: 'custom_polygon',
+          coords: customPathPoints,  // 다각형의 경계 좌표들
+          color: Colors.blue,  // 내부 색상
+          outlineColor: Colors.blue,  // 외곽선 색상
+          outlineWidth: 20,  // 외곽선 두께
+        );
+
+// 지도에 다각형 오버레이 추가
+        _mapController.addOverlay(polygonOverlay);
+      });
+    }
+  }
+
+  bool _isCloseToPath(Position userPosition, NLatLng pathPoint) {
+    const double thresholdDistance = 10.0; // 10미터 이내를 임계값으로 설정
+    double distance = Geolocator.distanceBetween(
+      userPosition.latitude,
+      userPosition.longitude,
+      pathPoint.latitude,
+      pathPoint.longitude,
+    );
+    return distance < thresholdDistance;
   }
 
   void _startTimer() {
@@ -168,7 +277,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _isPipMode = true;
     });
 
-    // 5초 후 PiP 모드를 종료
+    // 15초 후 PiP 모드를 종료
     Future.delayed(Duration(seconds: 15), () {
       if (mounted) {
         PictureInPicture.stopPiP();
@@ -188,235 +297,234 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return
-      // PiPMaterialApp( // PiPMaterialApp으로 변경
-      // home:
-      Stack(
-        children: [
-          Scaffold(backgroundColor: Colors.white,),
-          SafeArea(
-            child: Scaffold(
-              floatingActionButton: Stack(
-                children: [
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment(-0.8, 0.6),
-                      child: FloatingActionButton(
-                        onPressed: _enterPipMode,
-                        child: Icon(Icons.picture_in_picture),
-                      ),
+    return Stack(
+      children: [
+        Scaffold(backgroundColor: Colors.white,),
+        SafeArea(
+          child: Scaffold(
+            floatingActionButton: Stack(
+              children: [
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(-0.8, 0.6),
+                    child: FloatingActionButton(
+                      onPressed: _enterPipMode,
+                      child: Icon(Icons.picture_in_picture),
                     ),
                   ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment(-0.8, 0.8),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Image.asset(
-                          'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
-                          width: 56,
-                          height: 56,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment(1, 0.6),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: Offset(1, 2),
-                            ),
-                          ],
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
-                        ),
-                        width: 60,
-                        height: 60,
-                        child: GestureDetector(
-                          child: FractionallySizedBox(
-                            widthFactor: 0.8,
-                            heightFactor: 0.8,
-                            child: Image.asset(
-                              'assets/Frame_5005.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => BluetoothScreen()),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment(1, 0.8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: Offset(1, 2),
-                            ),
-                          ],
-                          color: Color(0xCB4869FF),
-                          shape: BoxShape.circle,
-                        ),
-                        width: 60,
-                        height: 60,
-                        child: GestureDetector(
-                          child: Image.asset(
-                            'assets/nugu-button.png',
-                            fit: BoxFit.fill,
-                          ),
-                          onTap: () {
-                            // Nugu 버튼 클릭시 동작
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              body: Stack(
-                children: [
-                  NaverMap(
-                    options: const NaverMapViewOptions(
-                      initialCameraPosition: NCameraPosition(
-                        target: NLatLng(37.5665, 126.9780), // 서울 시청
-                        zoom: 10,
-                      ),
-                    ),
-                    onMapReady: (controller) {
-                      _mapController = controller;
-                      if (_locationPermissionGranted) {
-                        _startLocationUpdates();
-                      }
-                    },
-                  ),
-                  if (_isAlert)
-                    FadeTransition(
-                      opacity: _alertController,
-                      child: Container(
-                        color: Colors.red.withOpacity(0.5),
-                        child: const Center(
-                          child: Text(
-                            '경고! 주행 이상이 감지되었습니다.',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  Positioned(
-                    bottom: 10,
-                    left: 10,
-                    right: 10,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 10,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.refresh, color: Colors.black),
-                            onPressed: () {
-                              // 여기에 새로고침 로직 추가
-                            },
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                '${_currentSpeed.toStringAsFixed(1)} km',
-                                style: TextStyle(fontSize: 20, color: Colors.black),
-                              ),
-                              SizedBox(width: 20),
-                              Text(
-                                _formatTime(_currentTime),
-                                style: TextStyle(fontSize: 20, color: Colors.black),
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.more_vert, color: Colors.black),
-                            onPressed: () {
-                              // 여기에 더보기 로직 추가
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment(-1.1,-1),
-                    child: SizedBox(
-                      child: Image.asset(fit:BoxFit.cover,
-                          'assets/green_destination.png', // 추가한 이미지 경로
-                          // width: 240, // 이미지 크기 조정
-                          // height: 100,
-                        ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 20,
-                    right: 0,
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(-0.8, 0.8),
                     child: GestureDetector(
                       onTap: () {
-                        // 현재 위치로 이동하는 로직
-                        if (_userLocationMarker != null) {
-                          _mapController.updateCamera(
-                            NCameraUpdate.scrollAndZoomTo(
-                              target: _userLocationMarker!.position,
-                              zoom: 15, // 현재 줌 레벨로 설정
-                            ),
-                          );
-                        }
+                        Navigator.pop(context);
                       },
                       child: Image.asset(
-                        'assets/navigation_current_location_button.png',
-                        // 현재 위치 버튼 이미지 경로
-                        width: 100,
-                        height: 100,
+                        'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
+                        width: 56,
+                        height: 56,
                       ),
                     ),
                   ),
-                  // PiP 모드 실행 버튼 추가
-                ],
-              ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(1, 0.6),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: Offset(1, 2),
+                          ),
+                        ],
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: GestureDetector(
+                        child: FractionallySizedBox(
+                          widthFactor: 0.8,
+                          heightFactor: 0.8,
+                          child: Image.asset(
+                            'assets/Frame_5005.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BluetoothScreen()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(1, 0.8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: Offset(1, 2),
+                          ),
+                        ],
+                        color: Color(0xCB4869FF),
+                        shape: BoxShape.circle,
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: GestureDetector(
+                        child: Image.asset(
+                          'assets/nugu-button.png',
+                          fit: BoxFit.fill,
+                        ),
+                        onTap: () {
+                          // Nugu 버튼 클릭시 동작
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            body: Stack(
+              children: [
+                NaverMap(
+                  options: const NaverMapViewOptions(
+                    initialCameraPosition: NCameraPosition(
+                      target: NLatLng(37.5665, 126.9780), // 서울 시청
+                      zoom: 10,
+                    ),
+                  ),
+                  onMapReady: (controller) {
+                    _mapController = controller;
+                    if (_locationPermissionGranted) {
+                      _startLocationUpdates();
+
+                      // 경로 오버레이 추가
+                      _combinedPathOverlay = NPathOverlay(
+                        id: 'custom_path',
+                        coords: customPathPoints,
+                      );
+                      _mapController.addOverlay(_combinedPathOverlay!);
+                    }
+                  },
+                ),
+                if (_isAlert)
+                  FadeTransition(
+                    opacity: _alertController,
+                    child: Container(
+                      color: Colors.red.withOpacity(0.5),
+                      child: const Center(
+                        child: Text(
+                          '경고! 주행 이상이 감지되었습니다.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Positioned(
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.refresh, color: Colors.black),
+                          onPressed: () {
+                            // 여기에 새로고침 로직 추가
+                          },
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${_currentSpeed.toStringAsFixed(1)} km',
+                              style: TextStyle(fontSize: 20, color: Colors.black),
+                            ),
+                            SizedBox(width: 20),
+                            Text(
+                              _formatTime(_currentTime),
+                              style: TextStyle(fontSize: 20, color: Colors.black),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.more_vert, color: Colors.black),
+                          onPressed: () {
+                            // 여기에 더보기 로직 추가
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment(-1.1,-1),
+                  child: SizedBox(
+                    child: Image.asset(fit:BoxFit.cover,
+                      'assets/green_destination.png', // 추가한 이미지 경로
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 20,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      // 현재 위치로 이동하는 로직
+                      if (_userLocationMarker != null) {
+                        _mapController.updateCamera(
+                          NCameraUpdate.scrollAndZoomTo(
+                            target: _userLocationMarker!.position,
+                            zoom: 15, // 현재 줌 레벨로 설정
+                          ),
+                        );
+                      }
+                    },
+                    child: Image.asset(
+                      'assets/navigation_current_location_button.png',
+                      // 현재 위치 버튼 이미지 경로
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          // PiP 모드 활성화 시 작은 화면에 MJPEG 스트림을 표시
-          if (_isPipMode) _buildPipStream(context),
-        ],
-      );
-    // );
+        ),
+        if (_isPipMode) _buildPipStream(context),
+      ],
+    );
   }
 
   Widget _buildPipStream(BuildContext context) {
