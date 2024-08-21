@@ -305,14 +305,14 @@ class _TutorialScreenState extends State<TutorialScreen> {
               '차량이 비정상적인 속도를 감지하면\n블랙박스가 자동으로 작동하여\n사용자가 밟고 있는 페달 상태를 기록해 줍니다.\n페달 오조작으로 인한 사고 피해를 예방합시다!',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: 17,
+                fontSize: 15,
               ),
             ),
           ),
 
           // 추가 이미지
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30), // 상하단 패딩을 추가하여 이미지와 컨텐츠 간의 여백 추가
+            padding: const EdgeInsets.symmetric(vertical: 5), // 상하단 패딩을 추가하여 이미지와 컨텐츠 간의 여백 추가
             child: Image.asset('assets/tutorialPage1.png'),
           ),
 
@@ -382,7 +382,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               '차량의 페달 왼쪽에 블랙박스를 설치하고\n아래와 같은 각도로 맞춰서\n발과 페달 동작이 잘 보이도록 조정하세요',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: 17,
+                fontSize: 15,
               ),
             ),
           ),
@@ -469,14 +469,14 @@ class _TutorialScreenState extends State<TutorialScreen> {
               '페달 블랙박스를 설치하면\n보험료 할인을 받을 수 있으며\nTMAP 운전 점수와 연계해서\n추가 혜택을 누릴 수 있습니다.',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: 17,
+                fontSize: 15,
               ),
             ),
           ),
 
           // 추가 이미지
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30), // 상하단 패딩을 추가하여 이미지와 컨텐츠 간의 여백 추가
+            padding: const EdgeInsets.symmetric(vertical: 5), // 상하단 패딩을 추가하여 이미지와 컨텐츠 간의 여백 추가
             child: Image.asset('assets/tutorialPage3.png'),
           ),
 
