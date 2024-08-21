@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
         SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Color(0xFFF5F5FA),
+            backgroundColor: Color(0xFFEFF0F4),
             body: Column(
               children: [
                 // 상단바 구현
@@ -167,10 +167,12 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-                // 4개 박스 부분 시작부분
+
+                // 상단 4개 박스
                 Flexible(
-                  flex: 38,
+                  flex: 33,
                   child: Container(
+                    margin: EdgeInsets.only(top: 12), // 위쪽 마진 추가하여 간격 조정
                     child: Column(
                       children: [
                         Expanded(
@@ -180,37 +182,58 @@ class Home extends StatelessWidget {
                                 // 1번 박스
                                 Expanded(
                                   child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 15.0,
-                                          right: 5,
-                                          top: 10,
-                                          bottom: 5),
+                                    padding: const EdgeInsets.only(
+                                        left: 15.0, right: 5, top: 5, bottom: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Color(0xFF6940F4),
+                                            Color(0xFF2B5DF5),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
                                       child: Box(
-                                        page:MapScreen(),
+                                        page: MapScreen(),
                                         tt: '내비',
                                         stt: '가장 빠르고 정확한 길안내',
                                         img: 'assets/car.png',
-                                        col: Colors.blueAccent,
+                                        col: Colors.transparent,
                                         subcol: 0xFFDCDCDC,
                                         fontcol: Colors.white,
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 // 2번 박스
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 5.0,
-                                        right: 15,
-                                        top: 10,
-                                        bottom: 5),
-                                    child: Box(
-                                      page: CardPage(),
-                                      tt: '대중교통',
-                                      stt: '버스, 지하철도 티맵에서',
-                                      img: 'assets/bus.png',
-                                      col: Colors.indigo,
-                                      subcol: 0xFFDCDCDC,
-                                      fontcol: Colors.white,
+                                        left: 5.0, right: 15, top: 5, bottom: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Color(0xFF314986),
+                                            Color(0xFF223158),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Box(
+                                        page: CardPage(),
+                                        tt: '대중교통',
+                                        stt: '버스, 지하철도 티맵에서',
+                                        img: 'assets/bus.png',
+                                        col: Colors.transparent,
+                                        subcol: 0xFFDCDCDC,
+                                        fontcol: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -226,10 +249,7 @@ class Home extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 15.0,
-                                        right: 5,
-                                        top: 5,
-                                        bottom: 10),
+                                        left: 15.0, right: 5, top: 5, bottom: 5),
                                     child: Box(
                                       page: MjpegStreamScreen(),
                                       tt: '주차',
@@ -245,10 +265,7 @@ class Home extends StatelessWidget {
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 5.0,
-                                        right: 15,
-                                        top: 5,
-                                        bottom: 10),
+                                        left: 5.0, right: 15, top: 5, bottom: 5),
                                     child: Box(
                                       tt: '대리운전',
                                       stt: '할인도 적립도 티나게 좋다',
@@ -268,43 +285,44 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 // 메인 서비스 루트 시작
                 Flexible(
-                  flex: 10,
+                  flex: 10, // flex 값을 증가시켜 높이를 더 크게 설정
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(width:5,color: Color(0xFFEC6F29)),
+                      border: Border.all(width: 3, color: Color(0xFFEB745E)),
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
                     ),
-                    margin: EdgeInsets.only(right: 15, left: 15),
+                    margin: EdgeInsets.only(right: 15, left: 15, top: 10, bottom: 0),
                     child: GestureDetector(
                       onTap: () {
-                        // 추가 처리 필요
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (c) => AgreeScreen(),
-                            ),
-                          );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            // TODO: 동의 예전에 했으면 바로 서비스 화면
+                            builder: (c) => AgreeScreen(),
+                          ),
+                        );
                       },
                       child: ListTile(
-                        title: Text('SAFT-T',
+                        title: Text('SAFE-T',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                                fontSize: 20, fontWeight: FontWeight.bold)),
                         subtitle: Text('도로 위 안전 운전을 위한 서비스',
-                            style: TextStyle(fontSize: 14, color: Colors.grey)),
+                            style: TextStyle(fontSize: 14, color: Color(0xFF9B9B9B))),
                         trailing: Image.asset('assets/shadowIcon.png'),
                       ),
                     ),
                   ),
                 ),
-                // 완전 하단 시작
+                // 하단 기타 서비스 8개
                 Flexible(
                   flex: 35,
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.transparent
+                      color: Colors.transparent,
                     ),
                     child: Column(
                       children: [
@@ -314,15 +332,7 @@ class Home extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // GestureDetector(onTap:(){Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     // builder: (c) => VideoStreamScreen(),
-                                //   ),
-                                // );},
-                                //     child:
-                                    SBox(picture: 'assets/rent.png'),
-                                // ),
+                                SBox(picture: 'assets/rent.png'),
                                 SBox(picture: 'assets/charge.png'),
                                 SBox(picture: 'assets/bike.png'),
                                 SBox(picture: 'assets/buycar.png'),
@@ -332,8 +342,9 @@ class Home extends StatelessWidget {
                         ),
                         Expanded(
                           child: Container(
-                            margin: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(left: 10, bottom: 15, right: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SBox(picture: 'assets/airportbus.png'),
                                 SBox(picture: 'assets/around.png'),
@@ -347,37 +358,53 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
+
               ],
             ),
+
+            // 하단바
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.white,
               selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.grey,
+              unselectedItemColor: Color(0xFFB2B9C1),
+              iconSize: 30, // 아이콘 크기 증가
+              selectedLabelStyle: TextStyle(fontSize: 14), // 선택된 항목의 텍스트 크기 증가
+              unselectedLabelStyle: TextStyle(fontSize: 12), // 선택되지 않은 항목의 텍스트 크기 증가
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+                BottomNavigationBarItem(icon: Icon(Icons.location_on), label: 'T지금'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.location_on), label: 'T지금'),
+                  icon: Image.asset(
+                    'assets/carlife.png',
+                    width: 30, // 아이콘 크기
+                    height: 30, // 아이콘 크기
+                    fit: BoxFit.contain, // 아이콘 크기 조정
+                  ),
+                  label: '카라이프',
+                ),
                 BottomNavigationBarItem(
-                    icon: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Image.asset('assets/carlife.png')),
-                    label: '카라이프'),
+                  icon: Image.asset(
+                    'assets/daeri.png',
+                    width: 30, // 아이콘 크기
+                    height: 30, // 아이콘 크기
+                    fit: BoxFit.contain, // 아이콘 크기 조정
+                  ),
+                  label: '대리운전',
+                ),
                 BottomNavigationBarItem(
-                    icon: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Image.asset('assets/daeri.png')),
-                    label: '대리운전'),
-                BottomNavigationBarItem(
-                    icon: SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Image.asset('assets/entire.png')),
-                    label: '전체'),
+                  icon: Image.asset(
+                    'assets/entire.png',
+                    width: 30, // 아이콘 크기
+                    height: 30, // 아이콘 크기
+                    fit: BoxFit.contain, // 아이콘 크기 조정
+                  ),
+                  label: '전체',
+                ),
               ],
             ),
+
+
           ),
         ),
       ],
@@ -385,6 +412,7 @@ class Home extends StatelessWidget {
   }
 }
 
+// 4분할 박스 class
 class Box extends StatelessWidget {
   const Box({
     super.key,
@@ -410,7 +438,7 @@ class Box extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      padding: EdgeInsets.only(top: 15),
+      padding: EdgeInsets.only(top: 10, left: 0, right: 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: col,
@@ -434,17 +462,17 @@ class Box extends StatelessWidget {
               title: Text(
                 tt!,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                   color: fontcol,
                 ),
               ),
               subtitle: Text(stt!,
-                  style: TextStyle(fontSize: 14, color: Color(subcol!))),
+                  style: TextStyle(fontSize: 13.5, color: Color(subcol!))),
             ),
             Positioned.fill(
               child: Align(
-                alignment: Alignment(1.0, 0.8),
+                alignment: Alignment(1.2, 0.8),
                 child: FractionallySizedBox(
                   widthFactor: 0.5,
                   heightFactor: 0.5,
@@ -462,9 +490,21 @@ class Box extends StatelessWidget {
   }
 }
 
+
+
 class SBox extends StatelessWidget {
-  const SBox({super.key, this.picture});
+  const SBox({
+    super.key,
+    this.picture,
+    this.text,
+    this.fontSize = 20.0, // 기본 글씨 크기 설정
+    this.imageSize = 90.0, // 기본 이미지 크기 설정
+  });
+
   final String? picture;
+  final String? text;
+  final double fontSize; // 글씨 크기 기본값 추가
+  final double imageSize; // 이미지 크기 기본값 추가
 
   @override
   Widget build(BuildContext context) {
@@ -475,8 +515,27 @@ class SBox extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Center(child: Image.asset(picture!)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (picture != null)
+              Image.asset(
+                picture!,
+                width: imageSize,
+                height: imageSize,
+              ),
+            if (text != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  text!,
+                  style: TextStyle(fontSize: fontSize),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
 }
+
