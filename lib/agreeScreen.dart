@@ -125,16 +125,14 @@ class _AgreeScreenState extends State<AgreeScreen> {
           ),
 
           // 동의하고 계속
-          Flexible(
-            flex: 3,
-            child: Align(
+             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 50.0),
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 15), // 좌우 마진 설정
                   width: double.infinity, // 버튼이 화면 전체 너비를 차지하게 설정
-                  height: 55.0, // 버튼 높이 설정
+                  height: MediaQuery.of(context).size.height * 0.07,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10), // 버튼의 모서리를 둥글게 설정
                     color: _all == false ? Color(0xFFEAEAEA) : Color(0xFF2962F7), // 색상 변경
@@ -164,7 +162,7 @@ class _AgreeScreenState extends State<AgreeScreen> {
                 ),
               ),
             ),
-          ),
+
         ],
       ),
     );
