@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/agreeScreen.dart';
-import 'package:raon_frontend/cardPage.dart';
+import 'package:raon_frontend/boramae.dart';
 import 'package:raon_frontend/setting.dart';
 import 'bluetooth.dart';
 import 'mqtt/MqttTestScreen.dart';
@@ -8,7 +8,7 @@ import 'mqtt/mqttPublisherTestScreen.dart';
 import 'map_screen.dart';
 import 'streaming.dart';
 import 'mqtt/mqttSubscriberTestScreen.dart';
-import 'cardPage.dart';
+import 'boramae.dart';
 import 'setting.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -228,7 +228,7 @@ class Home extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Box(
-                                        page: CardPage(),
+                                        page: boramae(),
                                         tt: '대중교통',
                                         stt: '버스, 지하철도 티맵에서',
                                         img: 'assets/bus.png',
