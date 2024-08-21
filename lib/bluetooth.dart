@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:csv/csv.dart';
 
-import 'mqtt/mqtt_publisher.dart';
+import 'mqtt/mqttPublisher.dart';
 
 class BluetoothScreen extends StatefulWidget {
   @override
@@ -34,19 +34,37 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     super.initState();
     checkPermissions();
     // generateCsvFile();
+    Future.delayed(Duration(seconds: 10), () {
+      if (selectedDevice == null) {
+        // 10초 후에도 selectedDevice가 null이면 화면 종료
+        Navigator.pop(context);
+      }
+    });
   }
 
   // 페어링된 장치를 가져오는 함수
   void getPairedDevices() async {
-
     List<BluetoothDevice> devices = [];
     try {
       devices = await FlutterBluetoothSerial.instance.getBondedDevices();
       setState(() {
         pairedDevices = devices;
       });
+
+      connectToOBDDevice();
     } catch (e) {
       print("Error fetching paired devices: $e");
+    }
+  }
+
+  // OBD 장치로 자동 연결하는 함수
+  void connectToOBDDevice() async {
+    for (var device in pairedDevices) {
+      // 이름에 "OBD"가 포함된 장치를 찾습니다.
+      if (device.name != null && device.name!.toLowerCase().contains('obdii')) {
+        await connectToDevice(device);
+        break;
+      }
     }
   }
 
@@ -56,12 +74,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   int throttle = 0;
   int pedal = 0;
   int fuelSystemStatus = 0;
+
   // 받아온 데이터들의 값을 추출하여 출력하는 함수
   void parseRPMResponse(String response) {
     // 응답을 공백으로 분리하여 리스트로 만듭니다.
     List<String> parts = response.split(' ');
-    if (response == '\r' || response == '\r\n')
-      return;
+    if (response == '\r' || response == '\r\n') return;
 
     if (parts.length >= 3) {
       // 각 PID에 따라 처리
@@ -70,7 +88,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           case "0C": // 엔진 RPM
             setState(() {
               this.rpm = (int.parse(parts[2], radix: 16) * 256 +
-                  int.parse(parts[3], radix: 16)) ~/ 4;
+                      int.parse(parts[3], radix: 16)) ~/
+                  4;
             });
             print('Engine RPM: $rpm');
             break;
@@ -115,11 +134,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   // 계속해서 request를 받아오는 함수
   StreamSubscription? subscription;
+
   void startListeningToOBD() {
     if (connection != null && subscription == null) {
       // 스트림 구독이 없을 때만 listen을 시작합니다.
       subscription = connection!.input!.listen(
-            (data) {
+        (data) {
           String response = utf8.decode(data);
           print(response);
           parseRPMResponse(response);
@@ -142,17 +162,16 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     if (connection != null) {
       // OBD-II 명령어를 ECU에 전달
       connection!.output.add(utf8.encode(command + "\r"));
-      await connection!.output.allSent;  // 전송이 완료될 때까지 대기
+      await connection!.output.allSent; // 전송이 완료될 때까지 대기
       startListeningToOBD();
     }
   }
 
-
   // 실제로 데이터를 요청시키는 함수를 호출하는 함수 -> MQTT로 발행
-  Future<void> requestAllData() async{
-    await sendOBDCommand("010C");  // 엔진 RPM 요청
+  Future<void> requestAllData() async {
+    await sendOBDCommand("010C"); // 엔진 RPM 요청
     await Future.delayed(Duration(milliseconds: 100));
-    await sendOBDCommand("010D");  // 차량 속도 요청
+    await sendOBDCommand("010D"); // 차량 속도 요청
     await Future.delayed(Duration(milliseconds: 100));
     await sendOBDCommand("0104"); // 엔진 부하
     await Future.delayed(Duration(milliseconds: 100));
@@ -165,12 +184,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
     // 데이터를 리스트로 수집
     List<String> data1 = [
-      DateTime.now().toString(),  // 시간
-      rpm.toString(),             // 엔진 RPM
-      speed.toString(),           // 차량 속도
-      load.toString(),            // 엔진 부하
-      throttle.toString(),         // 스로틀 위치
-      pedal.toString(),           // 가속 페달 위치
+      DateTime.now().toString(), // 시간
+      rpm.toString(), // 엔진 RPM
+      speed.toString(), // 차량 속도
+      load.toString(), // 엔진 부하
+      throttle.toString(), // 스로틀 위치
+      pedal.toString(), // 가속 페달 위치
       fuelSystemStatus.toString(), // 연료 시스템 상태
     ];
 
@@ -203,7 +222,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     file.write(row);
     await file.close();
     final fileContent = await File(path).readAsString();
-
   }
 
   Timer? sendTimer;
@@ -218,7 +236,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       });
 
       // 1초마다 데이터 받아오기
-      sendTimer = Timer.periodic(Duration(milliseconds: 800), (timer) async{
+      sendTimer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
         await requestAllData(); // 엔진 RPM 요청
       });
       // OBD-II 명령어 전송 (예: 엔진 RPM 요청)
@@ -229,6 +247,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   // csv api 호출해서 보내기
   var responseMessage;
+
   Future<void> sendCsvFile() async {
     // CSV 파일 경로 가져오기
     final directory = await getApplicationDocumentsDirectory();
@@ -275,8 +294,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   List<List<dynamic>> data = [
-    ['time','RPM', 'Speed', 'Load', 'ThrottlePos','PedalPos','FuelStatus'],
+    ['time', 'RPM', 'Speed', 'Load', 'ThrottlePos', 'PedalPos', 'FuelStatus'],
   ];
+
   // 데이터 csv 로 변환
   // Future<void> generateCsvFile() async {
   //   // 데이터 준비
@@ -302,35 +322,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('Paired Bluetooth Devices'),
-          actions:[
-            IconButton(
-              icon:Icon(Icons.select_all),
-              onPressed: () async {
-                await sendCsvFile();
-              },)
-          ]
-      ),
-      body: ListView.builder(
-        itemCount: pairedDevices.length,
-        itemBuilder: (context, index) {
-          BluetoothDevice device = pairedDevices[index];
-          return ListTile(
-            title: Text(device.name ?? 'Unknown Device'),
-            subtitle: Text(device.address.toString()),
-            trailing: device == selectedDevice
-                ? Icon(Icons.bluetooth_connected, color: Colors.blue)
-                : null,
-            onTap: () async {
-              await connectToDevice(device);
-            },
-          );
-        },
-      ),
+    return Center(
+      child: selectedDevice == null
+          ? CircularProgressIndicator() // 아직 장치가 선택되지 않은 경우 로딩 표시
+          : Text('Connected to ${selectedDevice!.name}'),
     );
   }
 }
-
-
