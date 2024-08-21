@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/selectWarnings.dart';
+import 'package:http/http.dart' as http;
 import 'tutorial.dart';
+import 'dart:convert';
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -48,7 +50,7 @@ class Setting extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 20.0), // 컨테이너 내부 하단 여백
             ),
 
-            // 경고 방식 선택
+            // 튜토리얼 화면으로 넘어가기
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -79,6 +81,7 @@ class Setting extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios),
               ),
             ),
+            // 경고 선택 방식 화면으로 넘어가기
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -87,11 +90,22 @@ class Setting extends StatelessWidget {
               ),
               child: ListTile(
                 contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
-                onTap: () {
+                onTap: () async{
+                  var option;
+                  try{
+                    var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
+                    if (response.statusCode == 200) {
+                      var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
+                      option = decodedresponse['data']['warningOption'];
+                    } else {
+                    }
+                  }
+                  catch (e) {
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (c) => SelectWarning(),
+                      builder: (c) => SelectWarning(selected: option, Id: 1),
                     ),
                   );
                 },

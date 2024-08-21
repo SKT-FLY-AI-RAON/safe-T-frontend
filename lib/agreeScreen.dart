@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'setting.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AgreeScreen extends StatefulWidget {
-  const AgreeScreen({super.key});
+  const AgreeScreen({super.key,this.Id});
+  final Id;
 
   @override
   State<AgreeScreen> createState() => _AgreeScreenState();
@@ -16,6 +19,44 @@ class _AgreeScreenState extends State<AgreeScreen> {
   bool _agree5 = false;
   bool _all = false;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  patch() async {
+    try {
+      final response = await http.patch(
+        Uri.parse('http://3.35.30.20:80/setting/agreement?userId={$widget.Id}'),
+        headers: {
+          'Content-Type': 'application/json',  // JSON 형식으로 보낼 때의 헤더
+        },
+        body: jsonEncode({  // 3. Body (Payload)
+          'code': 200,
+          "agreement": true,
+          "userId": widget.Id,
+        }),  // 데이터를 JSON 형식으로 변환하여 전송
+      );
+
+      // 응답 처리
+      if (response.statusCode == 200) {
+        print('PATCH 요청 성공: ${response.body}');
+      } else {
+        print('PATCH 요청 실패: 상태 코드 ${response.statusCode}');
+        print('응답 본문: ${response.body}');
+      }
+    } catch (e) {
+      print('예외 발생: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    patch();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
