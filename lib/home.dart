@@ -204,7 +204,7 @@ class Home extends StatelessWidget {
                                         top: 10,
                                         bottom: 5),
                                     child: Box(
-                                      page: cardPage(),
+                                      page: CardPage(),
                                       tt: '대중교통',
                                       stt: '버스, 지하철도 티맵에서',
                                       img: 'assets/bus.png',
