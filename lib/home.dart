@@ -204,7 +204,7 @@ class Home extends StatelessWidget {
                                         top: 10,
                                         bottom: 5),
                                     child: Box(
-                                      page: cardPage(),
+                                      page: CardPage(),
                                       tt: '대중교통',
                                       stt: '버스, 지하철도 티맵에서',
                                       img: 'assets/bus.png',
@@ -273,7 +273,7 @@ class Home extends StatelessWidget {
                   flex: 10,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFFE0A4A4)),
+                      border: Border.all(width:5,color: Color(0xFFEC6F29)),
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
                     ),

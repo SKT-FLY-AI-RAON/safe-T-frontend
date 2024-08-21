@@ -249,7 +249,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
       appBar: AppBar(
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
-        leading:IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
+        leading:currentPage == 0 ? SizedBox() :IconButton(icon:Icon(Icons.arrow_back),onPressed:(){
           setState(() {
             if (currentPage>0)
               currentPage--;
@@ -309,11 +309,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: Center(
                 child: Text(
                   '다음',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Color(0xFF2962F7),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -377,11 +377,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: Center(
                 child: Text(
                   '다음',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Color(0xFF2962F7),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -436,11 +436,11 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: Center(
                 child: Text(
                   'SAFE-T 서비스 시작하기',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Color(0xFF2962F7),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
