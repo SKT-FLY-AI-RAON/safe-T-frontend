@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_tts/flutter_tts.dart'; // TTS 패키지 추가
+import 'bluetooth.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -151,34 +152,83 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return Stack(
       children: [
         Scaffold(
-          floatingActionButton: Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: Offset(1, 2),
+          floatingActionButton:
+            Stack(
+              children: [
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(1, 0.6),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: Offset(1, 2),
+                          ),
+                        ],
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: GestureDetector(
+                        child: FractionallySizedBox(
+                          widthFactor: 0.8,
+                          heightFactor: 0.8,
+                          child: Image.asset(
+                            'assets/Frame_5005.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                          MaterialPageRoute(builder: (context) => BluetoothScreen()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(1, 0.8),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 3,
+                            offset: Offset(1, 2),
+                          ),
+                        ],
+                        color: Color(0xCB4869FF),
+                        shape: BoxShape.circle,
+                      ),
+                      width: 60,
+                      height: 60,
+                      child: GestureDetector(
+                          child: Image.asset(
+                              'assets/nugu-button.png',
+                              fit: BoxFit.fill,
+                            ),
+
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => BluetoothScreen()),
+                            // );
+                          },
+                        ),
+                    ),
+                  ),
                 ),
               ],
-              color: Colors.white,
-              shape: BoxShape.circle,
-              border: Border.all(width: 2.5, color: Color(0xFFE0A4A4)),
             ),
-            width: 60,
-            height: 60,
-            child: GestureDetector(
-              child: FractionallySizedBox(
-                widthFactor: 0.8,
-                heightFactor: 0.8,
-                child: Image.asset(
-                  'assets/Frame_5005.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              onTap: () {},
-            ),
-          ),
           body: Stack(
             children: [
               NaverMap(
@@ -270,32 +320,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   height: 100,
                 ),
               ),
-              Positioned(
-                bottom: 150,
-                right: 20,
-                child: GestureDetector(
-                  onTap: _onShieldPressed,
-                  child: Image.asset(
-                    'assets/obd_connection_red_button.png', // OBD 연결 이미지 경로
-                    width: 70,
-                    height: 70,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 100,
-                right: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    // 마이크 버튼 클릭시 동작할 로직 추가
-                  },
-                  child: Image.asset(
-                    'assets/blue_nugu_mike_button.png', // 마이크 버튼 이미지 경로
-                    width: 56,
-                    height: 56,
-                  ),
-                ),
-              ),
+
               Positioned(
                 bottom: 100,
                 left: 20,

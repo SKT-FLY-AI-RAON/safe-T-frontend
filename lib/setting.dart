@@ -61,7 +61,7 @@ class Setting extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (c) => tutorial(),
+                      builder: (c) => TutorialScreen(),
                     ),
                   );
                 },
