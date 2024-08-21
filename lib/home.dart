@@ -333,10 +333,10 @@ class Home extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(),
-                                Text('SAFT-T',
+                                Text('SAFE-T',
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
-                                          fontSize: 18, fontWeight: FontWeight.bold)),
+                                          fontSize: 22, fontWeight: FontWeight.bold)),
                                 Text('도로 위 안전 운전을 위한 서비스',
                                     style: TextStyle(fontSize: 14, color: Colors.grey)),
                                 SizedBox(),
@@ -344,7 +344,7 @@ class Home extends StatelessWidget {
                             ),
                           ),
 
-                          Align(alignment:Alignment(1, 0),child: FractionallySizedBox(heightFactor:0.9,widthFactor: 0.4,child:Image.asset('assets/shadowIcon.png'))),
+                          Align(alignment:Alignment(1, 0),child: FractionallySizedBox(heightFactor:0.9,widthFactor: 0.3,child:Image.asset('assets/shadowIcon.png'))),
                         ],
                       ),
                     ),
@@ -470,7 +470,7 @@ class Box extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      padding: EdgeInsets.only(top: 10, left: 0, right: 0),
+      padding: EdgeInsets.only(top: 5, left: 0, right: 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: col,
@@ -500,7 +500,7 @@ class Box extends StatelessWidget {
                 ),
               ),
               subtitle: Text(stt!,
-                  style: TextStyle(fontSize: 13.5, color: Color(subcol!))),
+                  style: TextStyle(fontSize: 11.8, color: Color(subcol!))),
             ),
             Positioned.fill(
               child: Align(
