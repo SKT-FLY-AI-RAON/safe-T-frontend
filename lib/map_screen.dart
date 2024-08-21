@@ -375,7 +375,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment(-1.1,-1),
                     child: SizedBox(
                       child: Image.asset(fit:BoxFit.cover,
                           'assets/green_destination.png', // 추가한 이미지 경로
