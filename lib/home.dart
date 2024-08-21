@@ -12,6 +12,7 @@ import 'boramae.dart';
 import 'setting.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'firstscreen.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -114,7 +115,12 @@ class Home extends StatelessWidget {
                                 iconSize: 25,
                                 color: Colors.blue,
                                 onPressed: () {
-                                  print('IconButton pressed');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (c) => firstscreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
@@ -199,7 +205,7 @@ class Home extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Box(
-                                        page: MapScreen(),
+                                        page: firstscreen(),
                                         tt: '내비',
                                         stt: '가장 빠르고 정확한 길안내',
                                         img: 'assets/car.png',
@@ -228,7 +234,6 @@ class Home extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Box(
-                                        page: boramae(),
                                         tt: '대중교통',
                                         stt: '버스, 지하철도 티맵에서',
                                         img: 'assets/bus.png',
@@ -253,7 +258,6 @@ class Home extends StatelessWidget {
                                     padding: const EdgeInsets.only(
                                         left: 15.0, right: 5, top: 5, bottom: 5),
                                     child: Box(
-                                      page: MjpegStreamScreen(),
                                       tt: '주차',
                                       stt: '주차요금 할인받고 간편결제',
                                       img: 'assets/park.png',
