@@ -314,9 +314,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         Navigator.pop(context);
                       },
                       child: Image.asset(
-                        'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
-                        width: 56,
-                        height: 56,
+                        'assets/load_map.png', // 화살표 버튼 이미지 경로
+                        width: 65,
+                        height: 65,
                       ),
                     ),
                   ),
@@ -345,7 +345,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                           widthFactor: 0.8,
                           heightFactor: 0.8,
                           child: Image.asset(
-                            'assets/Frame_5005.png',
+                            'assets/red_button_new.png',
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -523,26 +523,29 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 20,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      // 현재 위치로 이동하는 로직
-                      if (_userLocationMarker != null) {
-                        _mapController.updateCamera(
-                          NCameraUpdate.scrollAndZoomTo(
-                            target: _userLocationMarker!.position,
-                            zoom: 15, // 현재 줌 레벨로 설정
-                          ),
-                        );
-                      }
-                    },
-                    child: Image.asset(
-                      'assets/navigation_current_location_button.png',
-                      // 현재 위치 버튼 이미지 경로
-                      width: 100,
-                      height: 100,
+                Align(
+                  alignment: Alignment(0.95,-0.95),
+                  child: Positioned(
+                    top: 20,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        // 현재 위치로 이동하는 로직
+                        if (_userLocationMarker != null) {
+                          _mapController.updateCamera(
+                            NCameraUpdate.scrollAndZoomTo(
+                              target: _userLocationMarker!.position,
+                              zoom: 15, // 현재 줌 레벨로 설정
+                            ),
+                          );
+                        }
+                      },
+                      child: Image.asset(
+                        'assets/my_location.png',
+                        // 현재 위치 버튼 이미지 경로
+                        width: 65,
+                        height: 65,
+                      ),
                     ),
                   ),
                 ),
