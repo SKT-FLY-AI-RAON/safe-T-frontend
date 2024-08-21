@@ -169,7 +169,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     });
 
     // 5초 후 PiP 모드를 종료
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 15), () {
       if (mounted) {
         PictureInPicture.stopPiP();
         setState(() {
@@ -188,9 +188,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return PiPMaterialApp( // PiPMaterialApp으로 변경
-      home: Stack(
+    return
+      // PiPMaterialApp( // PiPMaterialApp으로 변경
+      // home:
+      Stack(
         children: [
+          Scaffold(backgroundColor: Colors.white,),
           SafeArea(
             child: Scaffold(
               floatingActionButton: Stack(
@@ -209,7 +212,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       alignment: Alignment(-0.8, 0.8),
                       child: GestureDetector(
                         onTap: () {
-                          // 좌측 화살표 버튼 클릭시 동작할 로직 추가
+                          Navigator.pop(context);
                         },
                         child: Image.asset(
                           'assets/black_arrow_button.png', // 화살표 버튼 이미지 경로
@@ -371,13 +374,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 20,
-                    left: 10,
-                    child: Image.asset(
-                      'assets/green_destination.png', // 추가한 이미지 경로
-                      width: 240, // 이미지 크기 조정
-                      height: 100,
+                  Align(
+                    alignment: Alignment(-1.1,-1),
+                    child: SizedBox(
+                      child: Image.asset(fit:BoxFit.cover,
+                          'assets/green_destination.png', // 추가한 이미지 경로
+                          // width: 240, // 이미지 크기 조정
+                          // height: 100,
+                        ),
                     ),
                   ),
                   Positioned(
@@ -411,30 +415,34 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           // PiP 모드 활성화 시 작은 화면에 MJPEG 스트림을 표시
           if (_isPipMode) _buildPipStream(context),
         ],
-      ),
-    );
+      );
+    // );
   }
 
   Widget _buildPipStream(BuildContext context) {
     return Positioned(
-      bottom: 20,
-      right: 20,
-      child: GestureDetector(
-        onTap: () {
-          PictureInPicture.stopPiP();
-          setState(() {
-            _isPipMode = false;
-          });
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            width: 200,
-            height: 150,
-            color: Colors.black,
-            child: Mjpeg(
-              stream: 'http://172.23.251.156:8080/video',
-              isLive: true,
+      child: Padding(
+        padding: const EdgeInsets.only(left:10,top:10),
+        child: Align(
+          alignment: Alignment.center,
+          child: GestureDetector(
+            onTap: () {
+              PictureInPicture.stopPiP();
+              setState(() {
+                _isPipMode = false;
+              });
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                width: MediaQuery.of(context).size.height * 1,
+                height: MediaQuery.of(context).size.height * 0.5,
+                color: Colors.black,
+                child: Mjpeg(
+                  stream: 'http://172.23.248.9:8080/video',
+                  isLive: true,
+                ),
+              ),
             ),
           ),
         ),
