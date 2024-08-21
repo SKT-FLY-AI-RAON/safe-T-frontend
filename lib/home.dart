@@ -9,6 +9,9 @@ import 'map_screen.dart';
 import 'streaming.dart';
 import 'mqtt/mqttSubscriberTestScreen.dart';
 import 'cardPage.dart';
+import 'setting.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatelessWidget {
   Home({super.key});
@@ -167,10 +170,9 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                // 상단 4개 박스
+                // 4개 박스 부분 시작부분
                 Flexible(
-                  flex: 33,
+                  flex: 38,
                   child: Container(
                     margin: EdgeInsets.only(top: 12), // 위쪽 마진 추가하여 간격 조정
                     child: Column(
@@ -285,10 +287,9 @@ class Home extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 // 메인 서비스 루트 시작
                 Flexible(
-                  flex: 10, // flex 값을 증가시켜 높이를 더 크게 설정
+                  flex: 15, // flex 값을 증가시켜 높이를 더 크게 설정
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(width: 3, color: Color(0xFFEB745E)),
@@ -297,32 +298,65 @@ class Home extends StatelessWidget {
                     ),
                     margin: EdgeInsets.only(right: 15, left: 15, top: 10, bottom: 0),
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            // TODO: 동의 예전에 했으면 바로 서비스 화면
-                            builder: (c) => AgreeScreen(),
-                          ),
-                        );
+                      onTap: () async{
+                        var agree;
+                        var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
+                        if (response.statusCode == 200) {
+                          var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
+                          agree = decodedresponse['data']['agreement'];
+                        } else {
+                          print('파일 전송 실패: 상태 코드 ${response.statusCode}');
+                        }
+                        // 추가 처리 필요
+                        if(agree != true) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => AgreeScreen(Id: 1),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (c) => Setting(),
+                            ),
+                          );
+                        }
                       },
-                      child: ListTile(
-                        title: Text('SAFE-T',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                        subtitle: Text('도로 위 안전 운전을 위한 서비스',
-                            style: TextStyle(fontSize: 14, color: Color(0xFF9B9B9B))),
-                        trailing: Image.asset('assets/shadowIcon.png'),
+                      child: Stack(
+                        children:[
+                          Align(
+                            alignment: Alignment(-0.8,0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(),
+                                Text('SAFT-T',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 18, fontWeight: FontWeight.bold)),
+                                Text('도로 위 안전 운전을 위한 서비스',
+                                    style: TextStyle(fontSize: 14, color: Colors.grey)),
+                                SizedBox(),
+                              ],
+                            ),
+                          ),
+
+                          Align(alignment:Alignment(1, 0),child: FractionallySizedBox(heightFactor:0.9,widthFactor: 0.4,child:Image.asset('assets/shadowIcon.png'))),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                // 하단 기타 서비스 8개
+                // 완전 하단 시작
                 Flexible(
                   flex: 35,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      // border: Border.all(),
+                        color: Colors.transparent
                     ),
                     child: Column(
                       children: [
@@ -403,8 +437,6 @@ class Home extends StatelessWidget {
                 ),
               ],
             ),
-
-
           ),
         ),
       ],
@@ -490,21 +522,19 @@ class Box extends StatelessWidget {
   }
 }
 
-
-
 class SBox extends StatelessWidget {
   const SBox({
     super.key,
     this.picture,
     this.text,
     this.fontSize = 20.0, // 기본 글씨 크기 설정
-    this.imageSize = 90.0, // 기본 이미지 크기 설정
+    // this.imageSize = 90.0, // 기본 이미지 크기 설정
   });
 
   final String? picture;
   final String? text;
   final double fontSize; // 글씨 크기 기본값 추가
-  final double imageSize; // 이미지 크기 기본값 추가
+  // final double imageSize; // 이미지 크기 기본값 추가
 
   @override
   Widget build(BuildContext context) {
@@ -515,27 +545,17 @@ class SBox extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (picture != null)
-              Image.asset(
-                picture!,
-                width: imageSize,
-                height: imageSize,
-              ),
-            if (text != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  text!,
-                  style: TextStyle(fontSize: fontSize),
+        child:
+              FractionallySizedBox(
+                widthFactor: 0.8,
+                heightFactor: 1,
+                child: Image.asset(
+                  picture!,
+                  fit:BoxFit.contain,
+
                 ),
               ),
-          ],
-        ),
       ),
     );
   }
 }
-
