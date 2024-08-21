@@ -92,7 +92,7 @@ class _SelectWarningState extends State<SelectWarning> {
               child: Image.asset(
                 _selectedImage,
                 // width: MediaQuery.of(context).size.width * 0.9, // 화면 너비의 90% 사용
-                height: MediaQuery.of(context).size.height * 0.6, // 고정된 이미지 높이
+                height: MediaQuery.of(context).size.height * 0.5, // 고정된 이미지 높이
                 fit: BoxFit.contain,
               ),
             ),
