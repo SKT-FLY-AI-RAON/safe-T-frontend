@@ -7,26 +7,25 @@ class firstscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 상태바 배경을 하얗게, 아이콘을 검정색으로 설정
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, // 상태바 배경색을 흰색으로 설정
-      statusBarIconBrightness: Brightness.dark, // 상태바 아이콘 색상을 검정색으로 설정
-      statusBarBrightness: Brightness.light, // iOS용 (밝은 상태바는 검정 아이콘을 의미)
-    ));
+    // // 상태바 배경을 하얗게, 아이콘을 검정색으로 설정
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarColor: Colors.white, // 상태바 배경색을 흰색으로 설정
+    //   statusBarIconBrightness: Brightness.dark, // 상태바 아이콘 색상을 검정색으로 설정
+    //   statusBarBrightness: Brightness.light, // iOS용 (밝은 상태바는 검정 아이콘을 의미)
+    // ));
 
     return SafeArea(
       child: Scaffold(
-        body: Stack(
         backgroundColor: Colors.white,
-        body:Stack(
+        body: Stack(
           children: [
             Image.asset(
-              'assets/firstscreen.png',
+              'assets/selectScreen.png',
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width, // 너비를 화면 너비로 설정
               fit: BoxFit.fill,
-              width:MediaQuery.of(context).size.height,
-              'assets/selectScreen.png',fit:BoxFit.fill,
+              // width:MediaQuery.of(context).size.height,
+
             ),
             DraggableScrollableSheet(
               // expand: false, // 화면 공간 차지와 비율
@@ -155,7 +154,6 @@ class firstscreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
