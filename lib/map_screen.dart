@@ -27,7 +27,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   double _currentSpeed = 0.0;
   TimeOfDay _currentTime = TimeOfDay.now();
 
-  bool _isAlert = false; // 주행 이상 여부
+  bool _isAlert = true; // 주행 이상 여부
   bool _isPipMode = false; // PiP 모드 여부
   late AnimationController _alertController;
   final FlutterTts _flutterTts = FlutterTts();
@@ -98,6 +98,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
+    _initializeTts(); // TTS 초기화 호출
+    _checkTtsAvailability(); // TTS 엔진 설치 확인 호출
+
     _requestLocationPermission();
     _startTimer();
 
@@ -107,6 +111,38 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
     );
     _alertController.repeat(reverse: true);
+  }
+
+  void _initializeTts() async {
+
+    // TTS 초기 설정
+    await _flutterTts.setLanguage("ko-KR");
+    await _flutterTts.setPitch(1.0);
+    await _flutterTts.setSpeechRate(1.0);
+
+    _flutterTts.setStartHandler(() {
+      print("TTS Started");
+    });
+
+    _flutterTts.setCompletionHandler(() {
+      print("TTS Completed");
+    });
+
+
+    _flutterTts.setErrorHandler((msg) {
+      print("TTS Error: $msg");
+    });
+  }
+
+  void _checkTtsAvailability() async {
+    var engines = await _flutterTts.getEngines;
+    print("Available TTS engines: $engines");
+
+    if (engines.isEmpty) {
+      print("No TTS engines installed.");
+    } else {
+      print("TTS engines installed: $engines");
+    }
   }
 
   Future<void> _requestLocationPermission() async {
@@ -153,7 +189,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _updatePathOverlay(position);
 
       // 속도를 이용한 주행 이상 감지 예시
-      if (_currentSpeed > 100) {
+      if (_currentSpeed >=0) {
         _triggerAlert();
       }
     });
@@ -240,14 +276,23 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isAlert = true;
     });
-    _speakAlertMessage("Warning! You are driving too fast.");
+    _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
+
 
     // PiP 모드로 전환
-    _enterPipMode();
+    //_enterPipMode();
   }
 
+  // 용욱 TTS 경고 추가
   Future<void> _speakAlertMessage(String message) async {
-    await _flutterTts.speak(message);
+    try {
+      await _flutterTts.setLanguage("ko-KR");  // 언어 설정 (한국어: "ko-KR")
+      await _flutterTts.setPitch(1.0);  // 음성 피치 조절 (기본값: 1.0)
+      await _flutterTts.setSpeechRate(0.5);  // 음성 속도 조절 (0.0 ~ 1.0)
+      await _flutterTts.speak(message);  // 메시지를 음성으로 변환
+    } catch (e) {
+      print("TTS error: $e");
+    }
   }
 
   void _enterPipMode() async {
@@ -297,6 +342,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           child: Scaffold(
             floatingActionButton: Stack(
               children: [
+                // 새로 추가된 버튼 - 오른쪽 상단에 위치
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(0.95, -0.7),
+                    child: FloatingActionButton(
+                      onPressed: _triggerAlert,
+                      child: Icon(Icons.warning, color: Colors.white),
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
                 Positioned(
                     child: Align(
                       alignment: Alignment(1, -0.9),
@@ -443,14 +499,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     opacity: _alertController,
                     child: Container(
                       color: Colors.red.withOpacity(0.5),
-                      child: const Center(
-                        child: Text(
-                          '경고! 주행 이상이 감지되었습니다.',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/fedal_warning.png', // 경고 이미지 파일 경로
+                          fit: BoxFit.contain,
+                          width: 400, // 원하는 이미지 크기 설정
+                          height: 400,
                         ),
                       ),
                     ),
