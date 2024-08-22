@@ -110,22 +110,27 @@ class firstscreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(10),
                                           color: Colors.white, // 배경색 설정
                                         ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => boramae()),
-                                            );
-                                          },
                                           child: Row(
                                             crossAxisAlignment: CrossAxisAlignment.center, // 중앙 정렬
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                'SKT 타워',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  // fontWeight: FontWeight.bold,
+                                              Expanded(
+                                                child: Container(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(builder: (context) => boramae()),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'SKT 타워',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        // fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                               // 세로선 추가 (중앙 정렬)
@@ -136,20 +141,20 @@ class firstscreen extends StatelessWidget {
                                                 margin: EdgeInsets.symmetric(horizontal: 30.0), // 텍스트와 아이콘 사이의 여백
                                               ),
                                               // Icon(Icons.location_pin),
-                                              IgnorePointer(
-                                                child: Text(
-                                                  'SKT 보라매',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    // fontWeight: FontWeight.bold,
+                                              Expanded(
+                                                child: IgnorePointer(
+                                                  child: Text(textAlign: TextAlign.end,
+                                                    'SKT 보라매',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      // fontWeight: FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
 
                                             ],
-
                                           ),
-                                        ),
                                       ),
                                     ],
                                   ),
