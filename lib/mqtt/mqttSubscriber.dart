@@ -7,7 +7,7 @@ class MqttSubscriber {
   final int port = 1883; // MQTT 포트 번호
   final String topic = 'pedal/topic'; // 구독할 토픽 이름
   MqttServerClient? client;
-  StreamController<String> messageStreamController = StreamController<String>();
+  StreamController<String> messageStreamController = StreamController<String>.broadcast();
 
   MqttSubscriber() {
     client = MqttServerClient(broker, '');
@@ -35,14 +35,16 @@ class MqttSubscriber {
         final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
         messageStreamController.add(pt);
-        print('수신된 메시지: $pt');
-        //TODO 페달 모델 결과에 따라 다른 화면으로 반환하는 것 필요
+        // print('수신된 메시지: $pt');
       });
     } catch (e) {
       print('MQTT 연결 실패: $e');
-      client!.disconnect();
+      client?.disconnect();
     }
   }
+
+  // Stream을 외부로 노출
+  Stream<String> get messageStream => messageStreamController.stream;
 
   void onConnected() {
     print('MQTT 연결 성공');
@@ -50,6 +52,10 @@ class MqttSubscriber {
 
   void onDisconnected() {
     print('MQTT 연결 해제');
+    // 재연결 로직 추가
+    Future.delayed(Duration(seconds: 5), () {
+      _connect(); // 재연결 시도
+    });
   }
 
   void onSubscribed(String topic) {
@@ -57,8 +63,7 @@ class MqttSubscriber {
   }
 
   void dispose() {
-    client!.disconnect();
+    client?.disconnect(); // Null 체크 추가
     messageStreamController.close();
   }
-
 }

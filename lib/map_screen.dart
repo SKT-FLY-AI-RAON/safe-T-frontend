@@ -8,10 +8,16 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:pip_view/pip_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'bluetooth.dart';  // Bluetooth 스크린 임포트
+import 'package:raon_frontend/mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스가 정의된 파일 import
+import 'dart:async';
+import 'mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스 임포트
+
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
+
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -24,76 +30,19 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   bool _locationPermissionGranted = false;
   late Stream<Position> _positionStream;
   StreamSubscription<Position>? _positionSubscription;
+  late StreamSubscription<String> subscription;
 
   double _currentSpeed = 0.0;
   TimeOfDay _currentTime = TimeOfDay.now();
 
-  bool _isAlert = true; // 주행 이상 여부
+  bool _isAlert = false; // 주행 이상 여부
   bool _isPipMode = false; // PiP 모드 여부
   late AnimationController _alertController;
   final FlutterTts _flutterTts = FlutterTts();
 
   // 경로를 구성하는 좌표들 (여러 경로를 합친 것)
   List<NLatLng> customPathPoints = [
-    NLatLng(37.49258525, 126.92601052),
-    NLatLng(37.49248007, 126.92685168),
-    NLatLng(37.49526331, 126.92746432),
-    NLatLng(37.49716870, 126.92790337),
-    NLatLng(37.49969860, 126.92830516),
-    NLatLng(37.50018054, 126.92803238),
-    NLatLng(37.50046322, 126.92757926),
-    NLatLng(37.50063838, 126.92747467),
-    NLatLng(37.50081076, 126.92742886),
-    NLatLng(37.50147430, 126.92800634),
-    NLatLng(37.50212477, 126.92782019),
-    NLatLng(37.50236367, 126.92705794),
-    NLatLng(37.50279008, 126.92650695),
-    NLatLng(37.50276623, 126.92544312),
-    NLatLng(37.50428670, 126.92546867),
-    NLatLng(37.50554588, 126.92436477),
-    NLatLng(37.50589215, 126.92363755),
-    NLatLng(37.50637467, 126.92288922),
-    NLatLng(37.51179628, 126.92505054),
-    NLatLng(37.51292664, 126.92566636),
-    NLatLng(37.51471302, 126.92707141),
-    NLatLng(37.51707461, 126.92872047),
-    NLatLng(37.51733114, 126.92893288),
-    NLatLng(37.52295169, 126.93803402),
-    NLatLng(37.52588713, 126.94366517),
-    NLatLng(37.52956676, 126.95068070),
-    NLatLng(37.53168501, 126.95473415),
-    NLatLng(37.53272300, 126.95736607),
-    NLatLng(37.53317577, 126.96041790),
-    NLatLng(37.53320629, 126.96269506),
-    NLatLng(37.53397518, 126.96807139),
-    NLatLng(37.53458677, 126.96963348),
-    NLatLng(37.53666792, 126.97079468),
-    NLatLng(37.54045359, 126.97088158),
-    NLatLng(37.54161738, 126.97084899),
-    NLatLng(37.54204180, 126.97278161),
-    NLatLng(37.54509723, 126.97199577),
-    NLatLng(37.54906060, 126.97176822),
-    NLatLng(37.55303305, 126.97277456),
-    NLatLng(37.55483325, 126.97307669),
-    NLatLng(37.55624220, 126.97292756),
-    NLatLng(37.55736531, 126.97288654),
-    NLatLng(37.55926906, 126.97451422),
-    NLatLng(37.56017780, 126.97489449),
-    NLatLng(37.56054559, 126.97581415),
-    NLatLng(37.56390967, 126.97711479),
-    NLatLng(37.56495092, 126.97737313),
-    NLatLng(37.56683773, 126.97727751),
-    NLatLng(37.56868133, 126.97721784),
-    NLatLng(37.56892916, 126.97731189),
-    NLatLng(37.56904465, 126.97763810),
-    NLatLng(37.56879874, 126.98096432),
-    NLatLng(37.56858869, 126.98296516),
-    NLatLng(37.56812484, 126.98568599),
-    NLatLng(37.56807104, 126.98583333),
-    NLatLng(37.56704954, 126.98584399),
-    NLatLng(37.56617156, 126.98583175),
-    NLatLng(37.56610857, 126.98446514),
-    NLatLng(37.56657746, 126.98453752),
+    // 좌표 데이터...
   ];
 
   @override
@@ -112,10 +61,60 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
     );
     _alertController.repeat(reverse: true);
+
+    // Provider를 통해 MqttSubscriber에 접근하여 메시지를 구독
+    final mqttSubscriber = Provider.of<MqttSubscriber>(context, listen: false);
+    subscription = mqttSubscriber.messageStream.listen((message) {
+      print("수신된 메시지: $message");
+
+
+      passOBDdataToMap(message);
+
+
+      // // Toast 메시지로 지도에 표시
+      // Fluttertoast.showToast(
+      //   msg: "수신된 메시지: $message",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   backgroundColor: Colors.black.withOpacity(0.7),
+      //   textColor: Colors.white,
+      // );
+    });
   }
 
-  void _initializeTts() async {
+  void passOBDdataToMap(String message) async {
+    if (message == 'start') {
+      print("Received start message"); // 디버그 로그 추가
+      await Fluttertoast.showToast(
+        msg: "스탓틋",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black.withOpacity(0.7),
+        textColor: Colors.white,
+      );
+    } else if (message == 'acc_push') {
+      print("Received accel message"); // 디버그 로그 추가
+      await Fluttertoast.showToast(
+        msg: "액셀이에요!!!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black.withOpacity(0.7),
+        textColor: Colors.white,
+      );
+    } else if (message == 'brake_push') {
+      print("Received brake message"); // 디버그 로그 추가
+      await Fluttertoast.showToast(
+        msg: "brake",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black.withOpacity(0.7),
+        textColor: Colors.white,
+      );
+    }
+  }
 
+
+  void _initializeTts() async {
     // TTS 초기 설정
     await _flutterTts.setLanguage("ko-KR");
     await _flutterTts.setPitch(1.0);
@@ -128,7 +127,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _flutterTts.setCompletionHandler(() {
       print("TTS Completed");
     });
-
 
     _flutterTts.setErrorHandler((msg) {
       print("TTS Error: $msg");
@@ -190,7 +188,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _updatePathOverlay(position);
 
       // 속도를 이용한 주행 이상 감지 예시
-      if (_currentSpeed >=0) {
+      if (_currentSpeed >= 0) {
         _triggerAlert();
       }
     });
@@ -275,10 +273,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   void _triggerAlert() {
     setState(() {
-      _isAlert = true;
+      _isAlert = false;
     });
     _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
-
 
     // PiP 모드로 전환
     //_enterPipMode();
@@ -329,6 +326,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    subscription.cancel(); // 구독 해제
     _positionSubscription?.cancel(); // 스트림 구독 취소
     _alertController.dispose();
     obd?.dispose();
@@ -336,6 +334,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   var obd = BluetoothHandler();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -357,29 +356,29 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 Positioned(
-                    child: Align(
-                      alignment: Alignment(1, -0.9),
-                      child: GestureDetector(
-                        onTap: () {
-                          // 현재 위치로 이동하는 로직
-                          if (_userLocationMarker != null) {
-                            _mapController.updateCamera(
-                              NCameraUpdate.scrollAndZoomTo(
-                                target: _userLocationMarker!.position,
-                                zoom: 15, // 현재 줌 레벨로 설정
-                              ),
-                            );
-                          }
-                        },
-                        child: Image.asset(
-                          'assets/my_location.png',
-                          // 현재 위치 버튼 이미지 경로
-                          width: 65,
-                          height: 65,
-                        ),
+                  child: Align(
+                    alignment: Alignment(1, -0.9),
+                    child: GestureDetector(
+                      onTap: () {
+                        // 현재 위치로 이동하는 로직
+                        if (_userLocationMarker != null) {
+                          _mapController.updateCamera(
+                            NCameraUpdate.scrollAndZoomTo(
+                              target: _userLocationMarker!.position,
+                              zoom: 15, // 현재 줌 레벨로 설정
+                            ),
+                          );
+                        }
+                      },
+                      child: Image.asset(
+                        'assets/my_location.png',
+                        // 현재 위치 버튼 이미지 경로
+                        width: 65,
+                        height: 65,
                       ),
                     ),
                   ),
+                ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(-0.8, 0.6),
@@ -394,7 +393,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     alignment: Alignment(-0.8, 0.8),
                     child: GestureDetector(
                       onTap: () {
-
+                        // Nugu 버튼 클릭시 동작
                       },
                       child: Image.asset(
                         'assets/load_map.png', // 화살표 버튼 이미지 경로
@@ -515,7 +514,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       color: Colors.red.withOpacity(0.5),
                       child: Center(
                         child: Image.asset(
-                          'assets/fedal_warning.png', // 경고 이미지 파일 경로
+                          'assets/pedal_warning.png', // 경고 이미지 파일 경로
                           fit: BoxFit.contain,
                           width: 400, // 원하는 이미지 크기 설정
                           height: 400,
@@ -550,7 +549,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             // 여기에 새로고침 로직 추가
                           },
                         ),
-
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline, // Baseline 기준으로 정렬
                           textBaseline: TextBaseline.alphabetic, // Row에서 TextBaseline을 맞추기 위해 설정
@@ -578,9 +576,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-
                             SizedBox(width: 40),
-
                             // Time Display using RichText
                             RichText(
                               text: TextSpan(
@@ -595,7 +591,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   TextSpan(text: ' '),  // Add a space between the period and time
-
                                   // Time Text (시간)
                                   TextSpan(
                                     text: _getFormattedTime(_currentTime), // Returns "8:33" or similar
@@ -610,9 +605,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             ),
                           ],
                         ),
-
-
-
                         // More Options Icon
                         IconButton(
                           icon: Icon(Icons.more_vert, color: Colors.black),
@@ -625,9 +617,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   ),
                 ),
                 Align(
-                  alignment: Alignment(-1.1,-1),
+                  alignment: Alignment(-1.1, -1),
                   child: SizedBox(
-                    child: Image.asset(fit:BoxFit.cover,
+                    child: Image.asset(
+                      fit: BoxFit.cover,
                       'assets/green_destination.png', // 추가한 이미지 경로
                     ),
                   ),
@@ -644,7 +637,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   Widget _buildPipStream(BuildContext context) {
     return Positioned(
       child: Padding(
-        padding: const EdgeInsets.only(left:10,top:10),
+        padding: const EdgeInsets.only(left: 10, top: 10),
         child: Align(
           alignment: Alignment.center,
           child: GestureDetector(

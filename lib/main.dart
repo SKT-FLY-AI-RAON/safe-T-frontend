@@ -7,10 +7,10 @@ import 'apiTest.dart';
 import 'setting.dart';
 import 'selectWarnings.dart';
 import 'home.dart';
-import 'map_screen.dart';
-import 'agreeScreen.dart';
-import 'streaming.dart';
-import 'tutorial.dart';
+import 'package:provider/provider.dart';
+import 'mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스 임포트
+import 'home.dart'; // Home 위젯 임포트
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +25,15 @@ void main() async {
   ));
 
   runApp(
-    MaterialApp(
-      home: Home(),  // Home 위젯으로 시작
+    MultiProvider(
+      providers: [
+        Provider<MqttSubscriber>(create: (_) => MqttSubscriber()), // MqttSubscriber를 Provider로 감쌈
+      ],
+      child: MaterialApp(
+        home: Home(),  // Home 위젯으로 시작
+      ),
     ),
   );
+
+
 }

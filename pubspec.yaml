@@ -49,6 +49,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_svg: ^1.0.3  # pubspec.yaml에 추가
   fluttertoast: ^8.2.8
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:

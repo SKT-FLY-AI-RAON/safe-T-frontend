@@ -38,6 +38,8 @@ Future<void> publishJsonMessage(Map<String, dynamic> message) async {
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
       print('Connected to the broker');
 
+      //TODO 블루투스로 받은 OBD -> row로 만들고 보내기
+
       // Dart 객체를 JSON 문자열로 변환
       String jsonString = jsonEncode(message);
 
