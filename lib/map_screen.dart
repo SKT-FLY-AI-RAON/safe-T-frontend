@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:pip_view/pip_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'bluetooth.dart';  // Bluetooth 스크린 임포트
 
 class MapScreen extends StatefulWidget {
@@ -285,9 +286,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void dispose() {
     _positionSubscription?.cancel(); // 스트림 구독 취소
     _alertController.dispose();
+    obd?.dispose();
     super.dispose();
   }
 
+  var obd = BluetoothHandler();
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -335,7 +338,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     alignment: Alignment(-0.8, 0.8),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+
                       },
                       child: Image.asset(
                         'assets/load_map.png', // 화살표 버튼 이미지 경로
@@ -373,11 +376,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             fit: BoxFit.contain,
                           ),
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => BluetoothScreen()),
-                          );
+                        onTap: () async {
+                          bool isConnected = await obd.startBluetoothProcess();
+
+                          if (isConnected) {
+                            Fluttertoast.showToast(
+                              msg: "OBD-II 장치에 성공적으로 연결되었습니다.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "OBD-II 장치를 찾지 못하거나 연결할 수 없습니다.",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
+                          }
                         },
                       ),
                     ),
@@ -594,21 +608,5 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   String _getFormattedTime(TimeOfDay time) {
     int hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
     return '$hour:${time.minute.toString().padLeft(2, '0')}';
-  }
-}
-
-class OtherScreen extends StatelessWidget {
-  const OtherScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Other Screen'),
-      ),
-      body: const Center(
-        child: Text('This is another screen'),
-      ),
-    );
   }
 }

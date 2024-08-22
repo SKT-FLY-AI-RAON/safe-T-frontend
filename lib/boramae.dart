@@ -9,6 +9,7 @@ class boramae extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor:Colors.white,
         body:Stack(
           children: [
             Image.asset(

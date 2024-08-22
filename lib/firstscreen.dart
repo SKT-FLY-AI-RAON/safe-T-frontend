@@ -9,12 +9,13 @@ class firstscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body:Stack(
           children: [
             Image.asset(
               height: MediaQuery.of(context).size.height,
               width:MediaQuery.of(context).size.height,
-              'assets/firstscreen.png',fit:BoxFit.fill,
+              'assets/selectScreen.png',fit:BoxFit.fill,
             ),
             DraggableScrollableSheet(
               // expand: false, // 화면 공간 차지와 비율
