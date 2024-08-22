@@ -42,10 +42,7 @@ class _SelectWarningState extends State<SelectWarning> {
 
       // 응답 처리
       if (response.statusCode == 200) {
-        print('PATCH 요청 성공: ${response.body}');
       } else {
-        print('PATCH 요청 실패: 상태 코드 ${response.statusCode}');
-        print('응답 본문: ${response.body}');
       }
     } catch (e) {
     print('예외 발생: $e');
