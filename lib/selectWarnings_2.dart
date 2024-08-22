@@ -81,42 +81,41 @@ class _SelectWarning_2State extends State<SelectWarning_2> {
         height:double.infinity,
         // color: Color(0xFFEFF0F4),
         child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      // decoration:BoxDecoration(
-                      //   borderRadius:BorderRadius.circular(15),
-                      //   // color:Colors.white,
-                      // ),
-                      child: _buildWarningOption(
-                        image: 'assets/warning-1.png',
-                        title: '페달\n블랙박스 화면 ',
-                        value: 1,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      // decoration:BoxDecoration(
-                      //   borderRadius:BorderRadius.circular(15),
-                      //   color:Colors.white,
-                      // ),
-                      child: _buildWarningOption(
-                        image: 'assets/warning-2.png',
-                        title: '네비 화면\n경고창 보이기',
-                        value: 2,
-                      ),
-                    ),
-                  ),
-                ],
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                height: MediaQuery.of(context).size.height * 0.7,
+                decoration:BoxDecoration(
+                  borderRadius:BorderRadius.circular(15),
+                  color: Color(0xFFEFF0F4),
+                ),
+                child: _buildWarningOption(
+                  image: 'assets/warning-1.png',
+                  title: '페달\n블랙박스 화면 ',
+                  value: 1,
+                ),
               ),
+            ),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 5),
+                height: MediaQuery.of(context).size.height * 0.7,
+                decoration:BoxDecoration(
+                  borderRadius:BorderRadius.circular(15),
+                  color: Color(0xFFEFF0F4),
+                ),
+                child: _buildWarningOption(
+                  image: 'assets/warning-2.png',
+                  title: '네비 화면\n경고창 보이기',
+                  value: 2,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-
     );
   }
 
@@ -153,7 +152,7 @@ class _SelectWarning_2State extends State<SelectWarning_2> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: _selectedWarningMethod == value ? Color(0xFF2962F7) : Colors.grey,
+              color: _selectedWarningMethod == value ? Color(0xFF2962F7) : Colors.black,
             ),
           ),
           SizedBox(height: 10),
