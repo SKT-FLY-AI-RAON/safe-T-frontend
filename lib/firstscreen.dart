@@ -66,6 +66,7 @@ class firstscreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 Container(
+                                  margin: EdgeInsets.only(bottom: 10.0), // 하단에 10.0의 여백을 추가
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
@@ -81,7 +82,8 @@ class firstscreen extends StatelessWidget {
                                     trailing: Icon(Icons.arrow_forward_ios),
                                   ),
                                 ),
-                                Divider(),
+
+                                // Divider(),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -96,19 +98,59 @@ class firstscreen extends StatelessWidget {
                                           // 추가 기능 구현
                                         },
                                       ),
-                                      ListTile(
-                                        title: Text('SKT 타워'),
-                                        trailing: Icon(Icons.location_pin),
-                                        onTap: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => boramae()),
-                                          );
-                                        },
+                                      Divider(height: 1, color: Color(0xFFBEBEBE),)
+                                      , // 가로선과 세로선이 맞닿도록 높이 설정
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          color: Colors.white, // 배경색 설정
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => boramae()),
+                                            );
+                                          },
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center, // 중앙 정렬
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'SKT 타워',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  // fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              // 세로선 추가 (중앙 정렬)
+                                              Container(
+                                                width: 1, // 세로선의 두께
+                                                height: 40, // 세로선의 높이를 가로선과 맞추기 위해 설정
+                                                color: Color(0xFFBEBEBE), // 세로선 색상
+                                                margin: EdgeInsets.symmetric(horizontal: 30.0), // 텍스트와 아이콘 사이의 여백
+                                              ),
+                                              // Icon(Icons.location_pin),
+                                              IgnorePointer(
+                                                child: Text(
+                                                  'SKT 보라매',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
