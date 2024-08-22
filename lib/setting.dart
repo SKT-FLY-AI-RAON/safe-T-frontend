@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:raon_frontend/selectWarnings.dart';
 import 'package:http/http.dart' as http;
+import 'selectWarnings_2.dart';
 import 'tutorial.dart';
 import 'dart:convert';
 
@@ -106,7 +107,7 @@ class Setting extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (c) => SelectWarning(selected: option, Id: 1),
+                          builder: (c) => SelectWarning_2(selected: option, Id: 1),
                         ),
                       );
                     },

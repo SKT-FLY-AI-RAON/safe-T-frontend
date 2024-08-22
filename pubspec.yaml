@@ -37,7 +37,6 @@ dependencies:
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
 
-
   #yongug dependencies added
   flutter_naver_map: ^1.2.3
   geolocator: ^10.0.1
@@ -49,6 +48,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_svg: ^1.0.3  # pubspec.yaml에 추가
+  fluttertoast: ^8.2.8
 
 dev_dependencies:
   flutter_test:

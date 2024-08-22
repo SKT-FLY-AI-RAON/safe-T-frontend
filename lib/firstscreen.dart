@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // 시스템 UI 스타일 변경을 위해 필요
 import 'boramae.dart';
 import 'map_screen.dart';
 
@@ -18,19 +17,25 @@ class firstscreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Stack(
+        backgroundColor: Colors.white,
+        body:Stack(
           children: [
             Image.asset(
               'assets/firstscreen.png',
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width, // 너비를 화면 너비로 설정
               fit: BoxFit.fill,
+              width:MediaQuery.of(context).size.height,
+              'assets/selectScreen.png',fit:BoxFit.fill,
             ),
             DraggableScrollableSheet(
+              // expand: false, // 화면 공간 차지와 비율
               initialChildSize: 0.4, // 초기 크기 (화면 높이의 40%)
               minChildSize: 0.1, // 최소 크기 (화면 높이의 10%)
               maxChildSize: 0.8, // 최대 크기 (화면 높이의 80%)
               builder: (BuildContext context, ScrollController scrollController) {
                 return Material(
+                  // 이 Material 위젯을 추가
                   elevation: 4,
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(20),
@@ -167,3 +172,4 @@ class firstscreen extends StatelessWidget {
     );
   }
 }
+
