@@ -273,7 +273,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
           //카메라
           Padding(
-            padding: EdgeInsets.only(top: 30), // 상단 패딩을 설정
+            padding: EdgeInsets.only(top: 5), // 상단 패딩을 설정
             child: Container(
               width: double.infinity, // 부모 위젯의 너비를 명확히 설정
               height: MediaQuery.of(context).size.height * 0.25, // 부모 위젯의 높이를 더 줄임
@@ -349,7 +349,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
         children: [
           //이미지
           Padding(
-            padding: EdgeInsets.only(top: 30), // 상단 패딩을 설정
+            padding: EdgeInsets.only(top: 5), // 상단 패딩을 설정
             child: Container(
               width: double.infinity, // 부모 위젯의 너비를 명확히 설정
               height: MediaQuery.of(context).size.height * 0.25, // 부모 위젯의 높이를 더 줄임
@@ -437,7 +437,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
 
           //이미지
           Padding(
-            padding: EdgeInsets.only(top: 30), // 상단 패딩을 설정
+            padding: EdgeInsets.only(top: 5), // 상단 패딩을 설정
             child: Container(
               width: double.infinity, // 부모 위젯의 너비를 명확히 설정
               height: MediaQuery.of(context).size.height * 0.25, // 부모 위젯의 높이를 더 줄임
