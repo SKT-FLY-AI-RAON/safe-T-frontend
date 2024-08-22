@@ -460,7 +460,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   left: 0,
                   right: 0,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       boxShadow: [
@@ -483,19 +483,34 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                           },
                         ),
 
-                        // Speed and Time Display
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.baseline, // Baseline 기준으로 정렬
+                          textBaseline: TextBaseline.alphabetic, // Row에서 TextBaseline을 맞추기 위해 설정
                           children: [
                             // Speed Display
-                            Text(
-                              '${_currentSpeed.toStringAsFixed(0)}',
-                              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Colors.black),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline, // Baseline 기준으로 정렬
+                              textBaseline: TextBaseline.alphabetic, // TextBaseline 설정
+                              children: [
+                                Text(
+                                  '${_currentSpeed.toStringAsFixed(0)}',
+                                  style: TextStyle(
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  ' km',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              ' km',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-                            ),
+
                             SizedBox(width: 40),
 
                             // Time Display using RichText
@@ -527,6 +542,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                             ),
                           ],
                         ),
+
+
 
                         // More Options Icon
                         IconButton(
