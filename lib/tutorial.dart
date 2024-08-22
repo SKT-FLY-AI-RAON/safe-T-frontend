@@ -412,7 +412,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
               child: Center(
                 child: Text(
                   '다음',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white,  fontWeight: FontWeight.bold),
                 ),
               ),
               decoration: BoxDecoration(
