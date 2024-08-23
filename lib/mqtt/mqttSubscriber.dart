@@ -1,6 +1,7 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
+import 'dart:math';
 
 class MqttSubscriber {
   final String broker = '3.35.30.20'; // Flask 서버의 MQTT 브로커 주소
@@ -11,7 +12,10 @@ class MqttSubscriber {
   bool isDisposed = false;
 
   MqttSubscriber() {
-    client = MqttServerClient(broker, '1');
+    client = MqttServerClient(broker, 'flutter_client_' + DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString());
     client!.port = port;
     client!.keepAlivePeriod = 20;
     client!.onConnected = onConnected;
