@@ -19,6 +19,7 @@ Future<void> publishJsonMessage(Map<String, dynamic> message) async {
   client.port = port;
   client.logging(on: true);
 
+
   // 자동 재연결 활성화
   client.autoReconnect = true;
 

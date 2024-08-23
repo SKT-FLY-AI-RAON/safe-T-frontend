@@ -72,6 +72,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   void passOBDdataToMap(String message) async {
+    print(message);
     if (message == 'start') {
       print("Received start message"); // 디버그 로그 추가
       await Fluttertoast.showToast(
@@ -81,6 +82,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.black.withOpacity(0.7),
         textColor: Colors.white,
       );
+
+      // pip mode start
+      _enterPipMode();
     } else if (message == 'acc_push') {
       print("Received accel message"); // 디버그 로그 추가
       await Fluttertoast.showToast(
@@ -90,6 +94,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.black.withOpacity(0.7),
         textColor: Colors.white,
       );
+
+      _triggerAlert();  // 'acc_push' 메시지 수신 시 경고 알림
     } else if (message == 'brake_push') {
       print("Received brake message"); // 디버그 로그 추가
       await Fluttertoast.showToast(
@@ -177,7 +183,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _updatePathOverlay(position);
 
       // 속도를 이용한 주행 이상 감지 예시
-      if (_currentSpeed >= 0) {
+      if (_currentSpeed >= 50) {
         _triggerAlert();
       }
     });
