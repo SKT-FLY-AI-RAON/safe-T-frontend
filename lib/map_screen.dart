@@ -31,6 +31,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late Stream<Position> _positionStream;
   StreamSubscription<Position>? _positionSubscription;
   late StreamSubscription<String> subscription;
+  var mqttSubscriber;
 
   double _currentSpeed = 0.0;
   TimeOfDay _currentTime = TimeOfDay.now();
@@ -63,22 +64,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _alertController.repeat(reverse: true);
 
     // Provider를 통해 MqttSubscriber에 접근하여 메시지를 구독
-    final mqttSubscriber = Provider.of<MqttSubscriber>(context, listen: false);
+    mqttSubscriber = MqttSubscriber();
     subscription = mqttSubscriber.messageStream.listen((message) {
       print("수신된 메시지: $message");
-
-
       passOBDdataToMap(message);
-
-
-      // // Toast 메시지로 지도에 표시
-      // Fluttertoast.showToast(
-      //   msg: "수신된 메시지: $message",
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   backgroundColor: Colors.black.withOpacity(0.7),
-      //   textColor: Colors.white,
-      // );
     });
   }
 
@@ -263,8 +252,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     return distance < thresholdDistance;
   }
 
+  Timer? _timer;
   void _startTimer() {
-    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       setState(() {
         _currentTime = TimeOfDay.now();
       });
@@ -326,10 +316,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _timer?.cancel();
+    print('cancel');
     subscription.cancel(); // 구독 해제
+    mqttSubscriber.dispose();
+    print('cancel 완1');
     _positionSubscription?.cancel(); // 스트림 구독 취소
+    print('cancel 완2');
     _alertController.dispose();
+    print('cancel 완3');
     obd?.dispose();
+    print('cancel 완4');
     super.dispose();
   }
 
@@ -345,16 +342,16 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             floatingActionButton: Stack(
               children: [
                 // 새로 추가된 버튼 - 오른쪽 상단에 위치
-                Positioned(
-                  child: Align(
-                    alignment: Alignment(0.95, -0.7),
-                    child: FloatingActionButton(
-                      onPressed: _triggerAlert,
-                      child: Icon(Icons.warning, color: Colors.white),
-                      backgroundColor: Colors.red,
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   child: Align(
+                //     alignment: Alignment(0.95, -0.7),
+                //     child: FloatingActionButton(
+                //       onPressed: _triggerAlert,
+                //       child: Icon(Icons.warning, color: Colors.white),
+                //       backgroundColor: Colors.red,
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(1, -0.9),
