@@ -1,6 +1,7 @@
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
+import 'dart:math'; // 랜덤 숫자 생성을 위해 추가
 
 class MqttSubscriber {
   final String broker = '3.35.30.20'; // Flask 서버의 MQTT 브로커 주소
@@ -11,7 +12,12 @@ class MqttSubscriber {
   bool isDisposed = false;
 
   MqttSubscriber() {
-    client = MqttServerClient(broker, '1');
+    // 고유한 클라이언트 ID를 랜덤 숫자를 사용하여 생성
+    final String uniqueClientId = 'flutter_client_' + DateTime
+        .now()
+        .millisecondsSinceEpoch
+        .toString();
+    client = MqttServerClient(broker, uniqueClientId); // 고유한 클라이언트 ID 사용
     client!.port = port;
     client!.keepAlivePeriod = 20;
     client!.onConnected = onConnected;
@@ -24,7 +30,7 @@ class MqttSubscriber {
   void _connect() async {
     if (isDisposed) return;
     final connMessage = MqttConnectMessage()
-        .withClientIdentifier('flutter_subscriber')
+        .withClientIdentifier(client!.clientIdentifier) // 고유한 클라이언트 ID 사용
         .startClean()
         .withWillQos(MqttQos.atMostOnce);
     client!.connectionMessage = connMessage;
