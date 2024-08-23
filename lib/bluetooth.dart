@@ -641,7 +641,7 @@ class BluetoothHandler {
   // 리소스 정리
   void dispose() {
     connection?.dispose();
-    sendTimer?.cancel();
+    if(sendTimer != null) sendTimer?.cancel();
     subscription?.cancel();
   }
 }

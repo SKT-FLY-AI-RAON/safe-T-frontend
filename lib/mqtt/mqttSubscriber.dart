@@ -8,9 +8,10 @@ class MqttSubscriber {
   final String topic = 'pedal/topic'; // 구독할 토픽 이름
   MqttServerClient? client;
   StreamController<String> messageStreamController = StreamController<String>.broadcast();
+  bool isDisposed = false;
 
   MqttSubscriber() {
-    client = MqttServerClient(broker, '');
+    client = MqttServerClient(broker, '1');
     client!.port = port;
     client!.keepAlivePeriod = 20;
     client!.onConnected = onConnected;
@@ -21,6 +22,7 @@ class MqttSubscriber {
   }
 
   void _connect() async {
+    if (isDisposed) return;
     final connMessage = MqttConnectMessage()
         .withClientIdentifier('flutter_subscriber')
         .startClean()
@@ -51,6 +53,7 @@ class MqttSubscriber {
   }
 
   void onDisconnected() {
+    if (isDisposed) return;
     print('MQTT 연결 해제');
     // 재연결 로직 추가
     Future.delayed(Duration(seconds: 5), () {
@@ -63,6 +66,7 @@ class MqttSubscriber {
   }
 
   void dispose() {
+    isDisposed = true;
     client?.disconnect(); // Null 체크 추가
     messageStreamController.close();
   }

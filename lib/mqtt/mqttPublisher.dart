@@ -15,7 +15,7 @@ Future<void> publishJsonMessage(Map<String, dynamic> message) async {
       .toString();
 
   // MQTT 클라이언트 생성
-  final client = MqttServerClient(broker, '');
+  final client = MqttServerClient(broker, '3');
   client.port = port;
   client.logging(on: true);
 
