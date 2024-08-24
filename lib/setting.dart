@@ -3,7 +3,10 @@ import 'package:raon_frontend/selectWarnings.dart';
 import 'package:http/http.dart' as http;
 import 'selectWarnings_2.dart';
 import 'tutorial.dart';
+import 'GlobalState.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
+
 
 class Setting extends StatelessWidget {
   const Setting({super.key});
@@ -93,21 +96,12 @@ class Setting extends StatelessWidget {
                   child: ListTile(
                     contentPadding: EdgeInsets.all(20), // ListTile 내부 패딩 추가
                     onTap: () async {
-                      var option;
-                      try{
-                        var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
-                        if (response.statusCode == 200) {
-                          var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
-                          option = decodedresponse['data']['warningOption'];
-                        } else {
-                        }
-                      }
-                      catch (e) {
-                      }
+                      await context.read<GlobalState>().getHttpRequestData();
+                      int AlertModeValue = context.read<GlobalState>().AlertMode;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (c) => SelectWarning_2(selected: option, Id: 1),
+                          builder: (c) => SelectWarning_2(selected: AlertModeValue, Id: 1),
                         ),
                       );
                     },

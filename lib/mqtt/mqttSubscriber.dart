@@ -20,7 +20,8 @@ class MqttSubscriber {
     client = MqttServerClient(broker, uniqueClientId); // 고유한 클라이언트 ID 사용
 
     client!.port = port;
-    client!.keepAlivePeriod = 20;
+
+    client!.keepAlivePeriod = 0;
     client!.onConnected = onConnected;
     client!.onDisconnected = onDisconnected;
     client!.onSubscribed = onSubscribed;

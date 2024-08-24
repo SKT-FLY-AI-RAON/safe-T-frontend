@@ -27,7 +27,7 @@ Future<void> publishJsonMessage(Map<String, dynamic> message) async {
   client.connectionMessage = MqttConnectMessage()
       .withClientIdentifier(clientId)
       .withWillQos(MqttQos.atLeastOnce)
-      .keepAliveFor(60)
+      .keepAliveFor(0)
       .startClean();
   client.connectTimeoutPeriod = 10000; // 10초로 타임아웃 시간 설정
 
@@ -40,6 +40,7 @@ Future<void> publishJsonMessage(Map<String, dynamic> message) async {
       print('Connected to the broker');
 
       //TODO 블루투스로 받은 OBD -> row로 만들고 보내기
+
 
       // Dart 객체를 JSON 문자열로 변환
       String jsonString = jsonEncode(message);

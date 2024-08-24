@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'GlobalState.dart';
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class SelectWarning_2 extends StatefulWidget {
   const SelectWarning_2({Key? key, this.selected, this.Id}) : super(key: key);
@@ -12,7 +14,7 @@ class SelectWarning_2 extends StatefulWidget {
 }
 
 class _SelectWarning_2State extends State<SelectWarning_2> {
-  int? _selectedWarningMethod;
+  var _selectedWarningMethod;
 
   @override
   void initState() {
@@ -59,6 +61,7 @@ class _SelectWarning_2State extends State<SelectWarning_2> {
   void _updateSelectedMethod(int value) {
     setState(() {
       _selectedWarningMethod = value;
+      context.read<GlobalState>().setIconAlertMode(_selectedWarningMethod);
     });
   }
 
