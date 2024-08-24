@@ -438,7 +438,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 ),
                 Positioned(
                   child: Align(
-                    alignment: Alignment(1.0, 0.4),
+                    alignment: Alignment(1.0, 0.39),
                     child: FloatingActionButton(
                       heroTag: 'autoAlert',
                       onPressed: _sendAutomaticEmergencyAlert,
