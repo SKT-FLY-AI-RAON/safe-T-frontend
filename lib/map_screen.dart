@@ -121,7 +121,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       );
       // 안내 음성
     } else if (message == 'end') {
-
+      _endAlert();
     }
   }
 
@@ -200,9 +200,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _updatePathOverlay(position);
 
       // 속도를 이용한 주행 이상 감지 예시
-      if (_currentSpeed >= 50) {
-        // _triggerAlert();
-      }
+      // if (_currentSpeed >= 50) {
+      // }
     });
   }
 
@@ -358,6 +357,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     // PiP 모드로 전환
     //_enterPipMode();
   }
+  void _endAlert() {
+    setState(() {
+      _isPipMode = false;
+      _isAlert = false;
+    });
+    _speakAlertMessage("ㅅㄱ");
+    // PiP 모드로 전환
+    //_enterPipMode();
+  }
 
   // 용욱 TTS 경고 추가
   Future<void> _speakAlertMessage(String message) async {
@@ -425,29 +433,29 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             floatingActionButton: Stack(
               children: [
                 // 새로 추가된 버튼 - 오른쪽 상단에 위치
-                Positioned(
-                  child: Align(
-                    alignment: Alignment(0.95, -0.7),
-                    child: FloatingActionButton(
-                      heroTag: 'hi',
-                      onPressed: _triggerAlertPip,
-                      child: Icon(Icons.warning, color: Colors.white),
-                      backgroundColor: Colors.red,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  child: Align(
-                    alignment: Alignment(1.0, 0.39),
-                    child: FloatingActionButton(
-                      heroTag: 'autoAlert',
-                      onPressed: _sendAutomaticEmergencyAlert,
-                      child: Icon(Icons.report, color: Colors.white),
-                      backgroundColor: Colors.blue,
-                      tooltip: '자동 신고',
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   child: Align(
+                //     alignment: Alignment(0.95, -0.7),
+                //     child: FloatingActionButton(
+                //       heroTag: 'hi',
+                //       onPressed: _triggerAlertPip,
+                //       child: Icon(Icons.warning, color: Colors.white),
+                //       backgroundColor: Colors.red,
+                //     ),
+                //   ),
+                // ),
+                // Positioned(
+                //   child: Align(
+                //     alignment: Alignment(1.0, 0.39),
+                //     child: FloatingActionButton(
+                //       heroTag: 'autoAlert',
+                //       onPressed: _sendAutomaticEmergencyAlert,
+                //       child: Icon(Icons.report, color: Colors.white),
+                //       backgroundColor: Colors.blue,
+                //       tooltip: '자동 신고',
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(1, -0.9),
@@ -466,21 +474,21 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       child: Image.asset(
                         'assets/my_location.png',
                         // 현재 위치 버튼 이미지 경로
-                        width: 65,
-                        height: 65,
+                        width: 50,
+                        height: 50,
                       ),
                     ),
                   ),
                 ),
-                Positioned(
-                  child: Align(
-                    alignment: Alignment(-0.8, 0.6),
-                    child: FloatingActionButton(
-                      onPressed: _enterPipMode,
-                      child: Icon(Icons.picture_in_picture),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   child: Align(
+                //     alignment: Alignment(-0.8, 0.6),
+                //     child: FloatingActionButton(
+                //       onPressed: _enterPipMode,
+                //       child: Icon(Icons.picture_in_picture),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(-0.8, 0.8),
@@ -490,8 +498,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       },
                       child: Image.asset(
                         'assets/load_map.png', // 화살표 버튼 이미지 경로
-                        width: 65,
-                        height: 65,
+                        width: 50,
+                        height: 50,
                       ),
                     ),
                   ),
