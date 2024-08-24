@@ -14,6 +14,7 @@ import 'bluetooth.dart';  // Bluetooth 스크린 임포트
 import 'package:raon_frontend/mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스가 정의된 파일 import
 import 'dart:async';
 import 'mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스 임포트
+import 'package:http/http.dart' as http;
 
 
 class MapScreen extends StatefulWidget {
@@ -263,6 +264,64 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     }
   }
 
+
+  // 자동 신고 기능 추가
+  Future<void> _sendEmergencyAlert(double latitude, double longitude, int userId) async {
+    final url = Uri.parse(
+      'http://3.35.30.20:80/api/sms/alert?latitude=$latitude&longitude=$longitude&userId=$userId',
+    );
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'accept': '*/*',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('긴급 알림이 성공적으로 전송되었습니다.');
+      } else {
+        print('긴급 알림 전송 실패. 상태 코드: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('긴급 알림 전송 중 오류 발생: $e');
+    }
+  }
+
+  void _sendAutomaticEmergencyAlert() async {
+    //user id - 상수 or 보안저장소
+    int userId = 1; // 실제 user ID를 가져오는 로직으로 대체
+
+    try {
+      // 현재 위치 가져오기
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+      // 현재 위도, 경도, userId로 경고 전송
+      await _sendEmergencyAlert(position.latitude, position.longitude, userId);
+
+      // 성공적으로 신고가 전송되었음을 알리는 토스트 메시지
+      await Fluttertoast.showToast(
+        msg: "자동 신고가 성공적으로 전송되었습니다.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black.withOpacity(0.7),
+        textColor: Colors.white,
+      );
+    } catch (e) {
+      print('자동 신고 전송 중 오류 발생: $e');
+      await Fluttertoast.showToast(
+        msg: "자동 신고 전송 실패!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.red.withOpacity(0.7),
+        textColor: Colors.white,
+      );
+    }
+  }
+
+
+
   bool _isCloseToPath(Position userPosition, NLatLng pathPoint) {
     const double thresholdDistance = 10.0; // 10미터 이내를 임계값으로 설정
     double distance = Geolocator.distanceBetween(
@@ -374,6 +433,18 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                       onPressed: _triggerAlertPip,
                       child: Icon(Icons.warning, color: Colors.white),
                       backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(1.0, 0.4),
+                    child: FloatingActionButton(
+                      heroTag: 'autoAlert',
+                      onPressed: _sendAutomaticEmergencyAlert,
+                      child: Icon(Icons.report, color: Colors.white),
+                      backgroundColor: Colors.blue,
+                      tooltip: '자동 신고',
                     ),
                   ),
                 ),
