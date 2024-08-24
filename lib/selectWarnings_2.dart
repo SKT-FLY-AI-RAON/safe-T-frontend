@@ -88,162 +88,187 @@ class _SelectWarning_2State extends State<SelectWarning_2> {
           children: [
             // Flexible(flex:3,child: Image.asset('assets/red_button_new.png')),
             // Flexible(flex:2,child: SizedBox()),
-            Flexible(
-              flex:14,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.7,
-                      child: GestureDetector(
-                        onTap: () {
-                          _updateSelectedMethod(1);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                boxShadow: _selectedWarningMethod == 1 ?[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.4),
-                                    spreadRadius: 1,
-                                    blurRadius: 3,
-                                    offset: Offset(3, 3),
-                                  ),
-                                ]:[],
-                                border: Border.all(width:1.7,color: _selectedWarningMethod != 1
-                                    ? Colors.grey
-                                    : Color(0xFF2962F7)),
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.asset(
-                                  'assets/warning-1.png',
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.4,
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.8,
-                                  fit: BoxFit.fill,
+               Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5),
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
+                        child: GestureDetector(
+                          onTap: () {
+                            _updateSelectedMethod(1);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: _selectedWarningMethod == 1 ?[
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 3,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ]:[],
+                                  border: Border.all(width:1.7,color: _selectedWarningMethod != 1
+                                      ? Colors.grey
+                                      : Color(0xFF2962F7)),
+                                  borderRadius: BorderRadius.circular(17),
+                                  color: Colors.white,
                                 ),
-                                // Image.asset(
-                                //   image,
-                                //   width: MediaQuery.of(context).size.width * 0.4, // 화면 너비의 90% 사용
-                                //   height: MediaQuery.of(context).size.height * 0.6, // 고정된 이미지 높이
-                                //   fit: BoxFit.contain,
-                                // ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.asset(
+                                    'assets/warning-1.png',
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.4,
+                                    height: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.8,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  // Image.asset(
+                                  //   image,
+                                  //   width: MediaQuery.of(context).size.width * 0.4, // 화면 너비의 90% 사용
+                                  //   height: MediaQuery.of(context).size.height * 0.6, // 고정된 이미지 높이
+                                  //   fit: BoxFit.contain,
+                                  // ),
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(textAlign: TextAlign.center,
-                              '페달\n블랙박스 화면',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: _selectedWarningMethod == 1
-                                    ? Color(0xFF2962F7)
-                                    : Colors.grey,
+                              SizedBox(height: 10),
+                              Text(textAlign: TextAlign.center,
+                                '페달\n블랙박스 화면',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: _selectedWarningMethod == 1
+                                      ? Color(0xFF2962F7)
+                                      : Colors.grey,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
+                            ],
+                          ),
                         ),
+                        // _buildWarningOption(
+                        //   image: 'assets/warning-1.png',
+                        //   title: '페달\n블랙박스 화면 ',
+                        //   value: 1,
+                        // ),
                       ),
-                      // _buildWarningOption(
-                      //   image: 'assets/warning-1.png',
-                      //   title: '페달\n블랙박스 화면 ',
-                      //   value: 1,
-                      // ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5),
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.5,
+                        child: GestureDetector(
+                          onTap: () {
+                            _updateSelectedMethod(2);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: _selectedWarningMethod == 2 ?[
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      spreadRadius: 1,
+                                      blurRadius: 3,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ]:[],
+                                  border: Border.all(width:1.5,color: _selectedWarningMethod != 2
+                                      ? Colors.grey
+                                      : Color(0xFF2962F7)),
+                                  borderRadius: BorderRadius.circular(17),
+                                  color: Colors.white,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.asset(
+                                    'assets/warning-2.png',
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.4,
+                                    height: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.8,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  // Image.asset(
+                                  //   image,
+                                  //   width: MediaQuery.of(context).size.width * 0.4, // 화면 너비의 90% 사용
+                                  //   height: MediaQuery.of(context).size.height * 0.6, // 고정된 이미지 높이
+                                  //   fit: BoxFit.contain,
+                                  // ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(textAlign: TextAlign.center,
+                                '네비 화면\n경고창 보이기',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: _selectedWarningMethod == 2
+                                      ? Color(0xFF2962F7)
+                                      : Colors.grey,
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                        // _buildWarningOption(
+                        //   image: 'assets/warning-2.png',
+                        //   title: '네비 화면\n경고창 보이기',
+                        //   value: 2,
+                        // ),
+                      ),
+                    ),
+                  ],
+                ),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: _selectedWarningMethod == 1 ? '경고 알림음과 함께\n화면에' : '경고 알림음과 함께\n화면에',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black, // 기본 색상
+                ),
+                children: [
+                  TextSpan(
+                    text: _selectedWarningMethod == 1 ? ' 페달 블랙박스' : ' 경고 알림',
+                    style: TextStyle(
+                      color: Color(0xFF2962F7), // 여기서 색상을 변경
+                      fontWeight: FontWeight.bold,
+                      fontSize:20,
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.7,
-                      child: GestureDetector(
-                        onTap: () {
-                          _updateSelectedMethod(2);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                boxShadow: _selectedWarningMethod == 2 ?[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.4),
-                                    spreadRadius: 1,
-                                    blurRadius: 3,
-                                    offset: Offset(3, 3),
-                                  ),
-                                ]:[],
-                                border: Border.all(width:1.5,color: _selectedWarningMethod != 2
-                                    ? Colors.grey
-                                    : Color(0xFF2962F7)),
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.asset(
-                                  'assets/warning-2.png',
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.4,
-                                  height: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width * 0.8,
-                                  fit: BoxFit.fill,
-                                ),
-                                // Image.asset(
-                                //   image,
-                                //   width: MediaQuery.of(context).size.width * 0.4, // 화면 너비의 90% 사용
-                                //   height: MediaQuery.of(context).size.height * 0.6, // 고정된 이미지 높이
-                                //   fit: BoxFit.contain,
-                                // ),
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(textAlign: TextAlign.center,
-                              '네비 화면\n경고창 보이기',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: _selectedWarningMethod == 2
-                                    ? Color(0xFF2962F7)
-                                    : Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                      // _buildWarningOption(
-                      //   image: 'assets/warning-2.png',
-                      //   title: '네비 화면\n경고창 보이기',
-                      //   value: 2,
-                      // ),
-                    ),
+                  TextSpan(
+                    text: _selectedWarningMethod == 1 ? ' 를 보여줍니다.' : ' 을 보여줍니다.',
+                    style:TextStyle(fontSize:16),
                   ),
                 ],
               ),
             ),
+            SizedBox(),
+            SizedBox(),
+            SizedBox(),
+            SizedBox(),
+            SizedBox(),
           ],
         ),
       ),
