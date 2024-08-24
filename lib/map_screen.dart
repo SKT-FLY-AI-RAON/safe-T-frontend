@@ -9,6 +9,7 @@ import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 import 'package:pip_view/pip_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'GlobalState.dart';
 import 'bluetooth.dart';  // Bluetooth 스크린 임포트
 import 'package:raon_frontend/mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스가 정의된 파일 import
 import 'dart:async';
@@ -16,7 +17,7 @@ import 'mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스 임포트
 
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({Key? key}) : super(key: key);
+  const MapScreen({Key? key,}) : super(key: key);
 
 
   @override
@@ -73,19 +74,27 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   void passOBDdataToMap(String message) async {
     print(message);
-    if (message == 'start') {
-      print("Received start message"); // 디버그 로그 추가
-      await Fluttertoast.showToast(
-        msg: "스탓틋",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.black.withOpacity(0.7),
-        textColor: Colors.white,
-      );
+    // if (message == 'start') {
+    //   print("Received start message"); // 디버그 로그 추가
+    //   await Fluttertoast.showToast(
+    //     msg: "스탓틋",
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     backgroundColor: Colors.black.withOpacity(0.7),
+    //     textColor: Colors.white,
+    //   );
+    //
+    //   // pip mode start
+    //   if(){
+    //
+    //   }
+    //   else{
+    //
+    //   }
+    // }
+    if (message == 'acc_push') {
+      int AlertModeValue = context.read<GlobalState>().AlertMode;
 
-      // pip mode start
-      _enterPipMode();
-    } else if (message == 'acc_push') {
       print("Received accel message"); // 디버그 로그 추가
       await Fluttertoast.showToast(
         msg: "액셀이에요!!!!",
@@ -94,8 +103,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.black.withOpacity(0.7),
         textColor: Colors.white,
       );
-
-      _triggerAlert();  // 'acc_push' 메시지 수신 시 경고 알림
+      if (AlertModeValue == 1){
+        _triggerAlertPip();  // 'acc_push' 메시지 수신 시 경고 알림
+      }
+      else {
+        _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
+      }
     } else if (message == 'brake_push') {
       print("Received brake message"); // 디버그 로그 추가
       await Fluttertoast.showToast(
@@ -105,6 +118,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.black.withOpacity(0.7),
         textColor: Colors.white,
       );
+      // 안내 음성
+    } else if (message == 'end') {
+
     }
   }
 
@@ -184,7 +200,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
       // 속도를 이용한 주행 이상 감지 예시
       if (_currentSpeed >= 50) {
-        _triggerAlert();
+        // _triggerAlert();
       }
     });
   }
@@ -267,12 +283,19 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     });
   }
 
-  void _triggerAlert() {
+  void _triggerAlertIcon() {
     setState(() {
-      _isAlert = false;
+      _isAlert = true;
     });
     _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
-
+    // PiP 모드로 전환
+    //_enterPipMode();
+  }
+  void _triggerAlertPip() {
+    setState(() {
+      _isPipMode = true;
+    });
+    _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -323,16 +346,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void dispose() {
     _timer?.cancel();
-    print('cancel');
     subscription.cancel(); // 구독 해제
     mqttSubscriber.dispose();
-    print('cancel 완1');
     _positionSubscription?.cancel(); // 스트림 구독 취소
-    print('cancel 완2');
     _alertController.dispose();
-    print('cancel 완3');
     obd?.dispose();
-    print('cancel 완4');
     super.dispose();
   }
 
@@ -348,16 +366,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             floatingActionButton: Stack(
               children: [
                 // 새로 추가된 버튼 - 오른쪽 상단에 위치
-                // Positioned(
-                //   child: Align(
-                //     alignment: Alignment(0.95, -0.7),
-                //     child: FloatingActionButton(
-                //       onPressed: _triggerAlert,
-                //       child: Icon(Icons.warning, color: Colors.white),
-                //       backgroundColor: Colors.red,
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(0.95, -0.7),
+                    child: FloatingActionButton(
+                      heroTag: 'hi',
+                      onPressed: _triggerAlertPip,
+                      child: Icon(Icons.warning, color: Colors.white),
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(1, -0.9),
@@ -640,9 +659,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   Widget _buildPipStream(BuildContext context) {
     return Positioned(
       child: Padding(
-        padding: const EdgeInsets.only(left: 10, top: 10),
+        padding: const EdgeInsets.only(left: 10, top: 10,right:10),
         child: Align(
-          alignment: Alignment.center,
+          alignment: Alignment(0,-0.3),
           child: GestureDetector(
             onTap: () {
               PictureInPicture.stopPiP();
@@ -651,13 +670,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               });
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               child: Container(
                 width: MediaQuery.of(context).size.height * 1,
                 height: MediaQuery.of(context).size.height * 0.5,
                 color: Colors.black,
                 child: Mjpeg(
-                  stream: 'http://172.23.248.9:8080/video',
+                  stream: 'http://192.168.219.60:8080/video',
                   isLive: true,
                 ),
               ),
