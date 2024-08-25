@@ -27,6 +27,11 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/main_Icon_2.png"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -50,6 +55,7 @@ dependencies:
   flutter_svg: ^1.0.3  # pubspec.yaml에 추가
   fluttertoast: ^8.2.8
   provider: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:

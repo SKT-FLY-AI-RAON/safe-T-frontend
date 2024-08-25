@@ -522,17 +522,17 @@ class BluetoothHandler {
   // 실제로 데이터를 요청시키는 함수를 호출하는 함수 -> MQTT로 발행
   Future<void> requestAllData() async {
     await sendOBDCommand("010C"); // 엔진 RPM 요청
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
     await sendOBDCommand("010D"); // 차량 속도 요청
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
     await sendOBDCommand("0104"); // 엔진 부하
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
     await sendOBDCommand("0111"); // 스로틀 위치
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
     await sendOBDCommand("0149"); // 가속 페달 위치
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
     await sendOBDCommand("0103"); // 연료 시스템 상태
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 80));
 
     // 데이터를 리스트로 수집
     List<String> data1 = [
@@ -548,12 +548,12 @@ class BluetoothHandler {
     // 데이터 매핑: time, rpm, speed, load, throttle, pedal, fuelSystemStatus
     Map<String, dynamic> jsonData = {
       'time': data1[0],
-      'rpm': data1[1],
-      'speed': data1[2],
-      'load': data1[3],
-      'throttle': data1[4],
-      'pedal': data1[5],
-      'fuelSystemStatus': data1[6],
+      'RPM': data1[1],
+      'Speed': data1[2],
+      'Load': data1[3],
+      'ThrottlePos': data1[4],
+      'PedalPos': data1[5],
+      'FuelStatus': data1[6],
     };
 
     // JSON으로 변환 후 MQTT 발행
@@ -584,7 +584,7 @@ class BluetoothHandler {
       selectedDevice = device;
 
       // 1초마다 데이터 받아오기
-      sendTimer = Timer.periodic(Duration(milliseconds: 800), (timer) async {
+      sendTimer = Timer.periodic(Duration(milliseconds: 600), (timer) async {
         await requestAllData(); // 엔진 RPM 요청
       });
     } catch (e) {
