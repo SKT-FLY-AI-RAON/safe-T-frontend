@@ -93,32 +93,35 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     //
     //   }
     // }
-    if (message == 'acc_push') {
+    if (message == 'acc_on') {
+      _sendAutomaticEmergencyAlert();
+
       int AlertModeValue = context.read<GlobalState>().AlertMode;
 
       print("Received accel message"); // 디버그 로그 추가
-      await Fluttertoast.showToast(
-        msg: "액셀이에요!!!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.black.withOpacity(0.7),
-        textColor: Colors.white,
-      );
+      // await Fluttertoast.showToast(
+      //   msg: "액셀이에요!!!!",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   backgroundColor: Colors.black.withOpacity(0.7),
+      //   textColor: Colors.white,
+      // );
       if (AlertModeValue == 1){
         _triggerAlertPip();  // 'acc_push' 메시지 수신 시 경고 알림
       }
       else {
         _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
       }
-    } else if (message == 'brake_push') {
+    } else if (message == 'brake_on') {
       print("Received brake message"); // 디버그 로그 추가
-      await Fluttertoast.showToast(
-        msg: "brake",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.black.withOpacity(0.7),
-        textColor: Colors.white,
-      );
+      // await Fluttertoast.showToast(
+      //   msg: "brake",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   backgroundColor: Colors.black.withOpacity(0.7),
+      //   textColor: Colors.white,
+      // );
+      _speakAlertMessage("브레이크를 밟고 있습니다");
       // 안내 음성
     } else if (message == 'end') {
       _endAlert();
@@ -219,7 +222,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     _userLocationMarker = NMarker(
       id: 'user_location',
       position: currentLatLng,
-      caption: NOverlayCaption(text: 'Your Location'),
+      caption: NOverlayCaption(text: '내 위치'),
     );
     _mapController.addOverlay(_userLocationMarker!);
 
@@ -362,7 +365,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       _isPipMode = false;
       _isAlert = false;
     });
-    _speakAlertMessage("ㅅㄱ");
+    _speakAlertMessage("상황 종료");
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -433,17 +436,17 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             floatingActionButton: Stack(
               children: [
                 // 새로 추가된 버튼 - 오른쪽 상단에 위치
-                // Positioned(
-                //   child: Align(
-                //     alignment: Alignment(0.95, -0.7),
-                //     child: FloatingActionButton(
-                //       heroTag: 'hi',
-                //       onPressed: _triggerAlertPip,
-                //       child: Icon(Icons.warning, color: Colors.white),
-                //       backgroundColor: Colors.red,
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(0.95, -0.7),
+                    child: FloatingActionButton(
+                      heroTag: 'hi',
+                      onPressed: _triggerAlertPip,
+                      child: Icon(Icons.warning, color: Colors.white),
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
                 // Positioned(
                 //   child: Align(
                 //     alignment: Alignment(1.0, 0.39),
@@ -480,15 +483,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                // Positioned(
-                //   child: Align(
-                //     alignment: Alignment(-0.8, 0.6),
-                //     child: FloatingActionButton(
-                //       onPressed: _enterPipMode,
-                //       child: Icon(Icons.picture_in_picture),
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  child: Align(
+                    alignment: Alignment(-0.8, 0.6),
+                    child: FloatingActionButton(
+                      onPressed: _enterPipMode,
+                      child: Icon(Icons.picture_in_picture),
+                    ),
+                  ),
+                ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(-0.8, 0.8),
@@ -755,7 +758,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 height: MediaQuery.of(context).size.height * 0.5,
                 color: Colors.black,
                 child: Mjpeg(
-                  stream: 'http://192.168.219.60:8080/video',
+                  stream: 'http://192.168.188.37:8080/video',
                   isLive: true,
                 ),
               ),
