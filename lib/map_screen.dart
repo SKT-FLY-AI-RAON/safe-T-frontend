@@ -35,6 +35,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   late StreamSubscription<String> subscription;
   var mqttSubscriber;
 
+  bool _sendmessage = false;
   double _currentSpeed = 0.0;
   TimeOfDay _currentTime = TimeOfDay.now();
 
@@ -47,6 +48,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   List<NLatLng> customPathPoints = [
     // 좌표 데이터...
   ];
+  void _reactAlert() {
+    _speakAlertMessage("급가속 상황입니다!   브레이크 페달을  잘 밟고 있는지   우선 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!      기어를  중립에  두세요!        차량  속도가  줄어든 뒤에는    사이드 브레이크를 단계적으로 올리거나   사람이 없는 가드레일 또는    벽면에 밀어붙여   속도를 줄이세요");
+  }
 
   @override
   void initState() {
@@ -94,8 +98,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     //   }
     // }
     if (message == 'acc_on') {
-      _sendAutomaticEmergencyAlert();
-
+      if(_sendmessage == false) {
+        _sendAutomaticEmergencyAlert();
+        _sendmessage = true;
+      }
       int AlertModeValue = context.read<GlobalState>().AlertMode;
 
       print("Received accel message"); // 디버그 로그 추가
@@ -113,6 +119,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
       }
     } else if (message == 'brake_on') {
+      if(_sendmessage == false) {
+        _sendAutomaticEmergencyAlert();
+        _sendmessage = true;
+      }
+      _reactAlert();
       print("Received brake message"); // 디버그 로그 추가
       // await Fluttertoast.showToast(
       //   msg: "brake",
@@ -121,7 +132,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       //   backgroundColor: Colors.black.withOpacity(0.7),
       //   textColor: Colors.white,
       // );
-      _speakAlertMessage("브레이크를 밟고 있습니다");
       // 안내 음성
     } else if (message == 'end') {
       _endAlert();
@@ -306,7 +316,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       await Fluttertoast.showToast(
         msg: "자동 신고가 성공적으로 전송되었습니다.",
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black.withOpacity(0.7),
         textColor: Colors.white,
       );
