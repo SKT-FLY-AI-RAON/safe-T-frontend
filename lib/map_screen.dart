@@ -36,7 +36,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   var mqttSubscriber;
   var brake = 0;
 
-  bool _sendmessage = false;
+  bool _onState = false;
   double _currentSpeed = 0.0;
   TimeOfDay _currentTime = TimeOfDay.now();
 
@@ -109,7 +109,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   ];
 
   void _reactAlert() {
-    _speakAlertMessage("급가속 상황입니다!   브레이크 페달을  잘 밟고 있는지   우선 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!      기어를  중립에  두세요!        차량  속도가  줄어든 뒤에는    사이드 브레이크를 단계적으로 올리거나   사람이 없는 가드레일 또는    벽면에 밀어붙여   속도를 줄이세요");
+    _speakAlertMessage("급가속 상황입니다!   브레이크 페달을  잘 밟고 있는지   우선 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
   }
 
   @override
@@ -158,35 +158,39 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     //   }
     // }
     if (message == 'acc_on') {
-      if(_sendmessage == false) {
+      if(_onState == false) {
         _sendAutomaticEmergencyAlert();
-        _sendmessage = true;
-      }
-      int AlertModeValue = context.read<GlobalState>().AlertMode;
 
-      print("Received accel message"); // 디버그 로그 추가
-      // await Fluttertoast.showToast(
-      //   msg: "액셀이에요!!!!",
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   backgroundColor: Colors.black.withOpacity(0.7),
-      //   textColor: Colors.white,
-      // );
-      if (AlertModeValue == 1){
-        _triggerAlertPip();  // 'acc_push' 메시지 수신 시 경고 알림
-      }
-      else {
-        _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
+        _onState = true;
+
+        int AlertModeValue = context.read<GlobalState>().AlertMode;
+
+        print("Received accel message"); // 디버그 로그 추가
+        // await Fluttertoast.showToast(
+        //   msg: "액셀이에요!!!!",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   backgroundColor: Colors.black.withOpacity(0.7),
+        //   textColor: Colors.white,
+        // );
+        if (AlertModeValue == 1) {
+          _triggerAlertPip();  // 'acc_push' 메시지 수신 시 경고 알림
+        }
+        else {
+          _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
+        }
+        _reactAlert();
       }
     } else if (message == 'brake_on') {
       brake++;
       _speakAlertMessage('브레이크를 밟고있습니다.');
-      if(_sendmessage == false) {
-        _sendAutomaticEmergencyAlert();
-        _sendmessage = true;
+      if(brake >= 2) {
+        if(_onState == false) {
+          _reactAlert();
+          _sendAutomaticEmergencyAlert();
+          _onState = true;
+        }
       }
-      if(brake >= 3)
-        _reactAlert();
       print("Received brake message"); // 디버그 로그 추가
       // await Fluttertoast.showToast(
       //   msg: "brake",
@@ -421,7 +425,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isAlert = true;
     });
-    _speakAlertMessage("액셀을 밟고있습니다!");
+    _speakAlertMessage("액셀을 밟고있습니다!   급가속 상황입니다!   화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
+
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -429,7 +434,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isPipMode = true;
     });
-    _speakAlertMessage("액셀을 밟고있습니다!");
+    _speakAlertMessage("액셀을 밟고있습니다!   급가속 상황입니다!   화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
     // PiP 모드로 전환
     //_enterPipMode();
   }
