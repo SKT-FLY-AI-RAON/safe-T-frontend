@@ -34,6 +34,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   StreamSubscription<Position>? _positionSubscription;
   late StreamSubscription<String> subscription;
   var mqttSubscriber;
+  var brake = 0;
 
   bool _sendmessage = false;
   double _currentSpeed = 0.0;
@@ -46,8 +47,67 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   // 경로를 구성하는 좌표들 (여러 경로를 합친 것)
   List<NLatLng> customPathPoints = [
-    // 좌표 데이터...
+    NLatLng(37.49258525, 126.92601052),
+    NLatLng(37.49248007, 126.92685168),
+    NLatLng(37.49526331, 126.92746432),
+    NLatLng(37.49716870, 126.92790337),
+    NLatLng(37.49969860, 126.92830516),
+    NLatLng(37.50018054, 126.92803238),
+    NLatLng(37.50046322, 126.92757926),
+    NLatLng(37.50063838, 126.92747467),
+    NLatLng(37.50081076, 126.92742886),
+    NLatLng(37.50147430, 126.92800634),
+    NLatLng(37.50212477, 126.92782019),
+    NLatLng(37.50236367, 126.92705794),
+    NLatLng(37.50279008, 126.92650695),
+    NLatLng(37.50276623, 126.92544312),
+    NLatLng(37.50428670, 126.92546867),
+    NLatLng(37.50554588, 126.92436477),
+    NLatLng(37.50589215, 126.92363755),
+    NLatLng(37.50637467, 126.92288922),
+    NLatLng(37.51179628, 126.92505054),
+    NLatLng(37.51292664, 126.92566636),
+    NLatLng(37.51471302, 126.92707141),
+    NLatLng(37.51707461, 126.92872047),
+    NLatLng(37.51733114, 126.92893288),
+    NLatLng(37.52295169, 126.93803402),
+    NLatLng(37.52588713, 126.94366517),
+    NLatLng(37.52956676, 126.95068070),
+    NLatLng(37.53168501, 126.95473415),
+    NLatLng(37.53272300, 126.95736607),
+    NLatLng(37.53317577, 126.96041790),
+    NLatLng(37.53320629, 126.96269506),
+    NLatLng(37.53397518, 126.96807139),
+    NLatLng(37.53458677, 126.96963348),
+    NLatLng(37.53666792, 126.97079468),
+    NLatLng(37.54045359, 126.97088158),
+    NLatLng(37.54161738, 126.97084899),
+    NLatLng(37.54204180, 126.97278161),
+    NLatLng(37.54509723, 126.97199577),
+    NLatLng(37.54906060, 126.97176822),
+    NLatLng(37.55303305, 126.97277456),
+    NLatLng(37.55483325, 126.97307669),
+    NLatLng(37.55624220, 126.97292756),
+    NLatLng(37.55736531, 126.97288654),
+    NLatLng(37.55926906, 126.97451422),
+    NLatLng(37.56017780, 126.97489449),
+    NLatLng(37.56054559, 126.97581415),
+    NLatLng(37.56390967, 126.97711479),
+    NLatLng(37.56495092, 126.97737313),
+    NLatLng(37.56683773, 126.97727751),
+    NLatLng(37.56868133, 126.97721784),
+    NLatLng(37.56892916, 126.97731189),
+    NLatLng(37.56904465, 126.97763810),
+    NLatLng(37.56879874, 126.98096432),
+    NLatLng(37.56858869, 126.98296516),
+    NLatLng(37.56812484, 126.98568599),
+    NLatLng(37.56807104, 126.98583333),
+    NLatLng(37.56704954, 126.98584399),
+    NLatLng(37.56617156, 126.98583175),
+    NLatLng(37.56610857, 126.98446514),
+    NLatLng(37.56657746, 126.98453752),
   ];
+
   void _reactAlert() {
     _speakAlertMessage("급가속 상황입니다!   브레이크 페달을  잘 밟고 있는지   우선 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!      기어를  중립에  두세요!        차량  속도가  줄어든 뒤에는    사이드 브레이크를 단계적으로 올리거나   사람이 없는 가드레일 또는    벽면에 밀어붙여   속도를 줄이세요");
   }
@@ -119,11 +179,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
       }
     } else if (message == 'brake_on') {
+      brake++;
+      _speakAlertMessage('브레이크를 밟고있습니다.');
       if(_sendmessage == false) {
         _sendAutomaticEmergencyAlert();
         _sendmessage = true;
       }
-      _reactAlert();
+      if(brake >= 3)
+        _reactAlert();
       print("Received brake message"); // 디버그 로그 추가
       // await Fluttertoast.showToast(
       //   msg: "brake",
@@ -358,7 +421,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isAlert = true;
     });
-    _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
+    _speakAlertMessage("액셀을 밟고있습니다!");
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -366,7 +429,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isPipMode = true;
     });
-    _speakAlertMessage("액셀을밟고있습니다!액셀을밟고있습니다!");
+    _speakAlertMessage("액셀을 밟고있습니다!");
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -493,15 +556,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Positioned(
-                  child: Align(
-                    alignment: Alignment(-0.8, 0.6),
-                    child: FloatingActionButton(
-                      onPressed: _enterPipMode,
-                      child: Icon(Icons.picture_in_picture),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   child: Align(
+                //     alignment: Alignment(-0.8, 0.6),
+                //     child: FloatingActionButton(
+                //       onPressed: _enterPipMode,
+                //       child: Icon(Icons.picture_in_picture),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   child: Align(
                     alignment: Alignment(-0.8, 0.8),
