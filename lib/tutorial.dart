@@ -379,7 +379,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 30), // 패딩을 조정하여 여백 통일
             child: Text(
               textAlign: TextAlign.center,
-              '차량의 페달 왼쪽에 블랙박스를 설치하고\n아래와 같은 각도로 맞춰서\n발과 페달 동작이 잘 보이도록 조정하세요',
+              '양발 운전 지양 하며\n차량의 페달 왼쪽에 블랙박스를 설치하고\n아래와 같은 각도로 맞춰서\n발과 페달 동작이 잘 보이도록 조정하세요',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,

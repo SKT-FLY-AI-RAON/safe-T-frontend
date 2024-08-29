@@ -2106,63 +2106,63 @@ class Home extends StatelessWidget {
                 // 메인 서비스 루트 시작
                 Flexible(
                   flex: 15, // flex 값을 증가시켜 높이를 더 크게 설정
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 3, color: Color(0xFFEB745E)),
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                    ),
-                    margin: EdgeInsets.only(right: 15, left: 15, top: 10, bottom: 0),
-                    child: GestureDetector(
-                      onTap: () async{
-                        var agree;
-                        var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
-                        if (response.statusCode == 200) {
-                          var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
-                          agree = decodedresponse['data']['agreement'];
-                        } else {
-                          print('파일 전송 실패: 상태 코드 ${response.statusCode}');
-                        }
-                        // 추가 처리 필요
-                        if(agree != true) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (c) => AgreeScreen(Id: 1),
-                            ),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (c) => Setting(),
-                            ),
-                          );
-                        }
-                      },
-                      child: Stack(
-                        children:[
-                          Align(
-                            alignment: Alignment(-0.8,0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(),
-                                Text('SAFE-T',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 22, fontWeight: FontWeight.bold)),
-                                Text('도로 위 안전 운전을 위한 서비스',
-                                    style: TextStyle(fontSize: 14, color: Colors.grey)),
-                                SizedBox(),
-                              ],
-                            ),
+                  child: GestureDetector(
+                    onTap: () async{
+                      var agree;
+                      var response = await http.get(Uri.parse('http://3.35.30.20:80/setting?userId=1'));
+                      if (response.statusCode == 200) {
+                        var decodedresponse = jsonDecode((utf8.decode(response.bodyBytes)));
+                        agree = decodedresponse['data']['agreement'];
+                      } else {
+                        print('파일 전송 실패: 상태 코드 ${response.statusCode}');
+                      }
+                      // 추가 처리 필요
+                      if(agree != true) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (c) => AgreeScreen(Id: 1),
                           ),
-
-                          Align(alignment:Alignment(1, 0),child: FractionallySizedBox(heightFactor:0.9,widthFactor: 0.3,child:Image.asset('assets/shadowIcon.png'))),
-                        ],
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (c) => Setting(),
+                          ),
+                        );
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 3, color: Color(0xFFEB745E)),
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
                       ),
+                      margin: EdgeInsets.only(right: 15, left: 15, top: 10, bottom: 0),
+                        child: Stack(
+                          children:[
+                            Align(
+                              alignment: Alignment(-0.8,0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(),
+                                  Text('SAFE-T',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 22, fontWeight: FontWeight.bold)),
+                                  Text('도로 위 안전 운전을 위한 서비스',
+                                      style: TextStyle(fontSize: 14, color: Colors.grey)),
+                                  SizedBox(),
+                                ],
+                              ),
+                            ),
+
+                            Align(alignment:Alignment(1, 0),child: FractionallySizedBox(heightFactor:0.9,widthFactor: 0.3,child:Image.asset('assets/shadowIcon.png'))),
+                          ],
+                        ),
                     ),
                   ),
                 ),
