@@ -54,7 +54,6 @@ class _AgreeScreenState extends State<AgreeScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    patch();
     super.dispose();
   }
   @override
@@ -72,7 +71,7 @@ class _AgreeScreenState extends State<AgreeScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "SAFT-T\n서비스 이용을 위해\n동의가 필요해요",
+                "SAFE-T\n서비스 이용을 위해\n동의가 필요해요",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800),
               ),
             ),
@@ -136,31 +135,31 @@ class _AgreeScreenState extends State<AgreeScreen> {
                     _agree1 = value;
                     _updateAllCheckbox();
                   });
-                }),
+                }, '[필수] 개인정보 수집 및 이용 동의'),
                 _buildCustomCheckboxTile(_agree2, (bool value) {
                   setState(() {
                     _agree2 = value;
                     _updateAllCheckbox();
                   });
-                }),
+                }, '[필수] 주변 기기 장치 검색 및 이용 동의'),
                 _buildCustomCheckboxTile(_agree3, (bool value) {
                   setState(() {
                     _agree3 = value;
                     _updateAllCheckbox();
                   });
-                }),
+                }, '[필수] 위치 정보 내용 수집 및 이용 동의'),
                 _buildCustomCheckboxTile(_agree4, (bool value) {
                   setState(() {
                     _agree4 = value;
                     _updateAllCheckbox();
                   });
-                }),
-                _buildCustomCheckboxTile(_agree5, (bool value) {
-                  setState(() {
-                    _agree5 = value;
-                    _updateAllCheckbox();
-                  });
-                }),
+                },'[필수] 주행 데이터 수집 및 이용 동의'),
+                // _buildCustomCheckboxTile(_agree5, (bool value) {
+                //   setState(() {
+                //     _agree5 = value;
+                //     _updateAllCheckbox();
+                //   });
+                // },'[필수] 개인정보 수집 및 이용 동의'),
               ],
             ),
           ),
@@ -181,6 +180,7 @@ class _AgreeScreenState extends State<AgreeScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (_all == true) {
+                        patch();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -209,12 +209,12 @@ class _AgreeScreenState extends State<AgreeScreen> {
     );
   }
 
-  Widget _buildCustomCheckboxTile(bool isChecked, ValueChanged<bool> onChanged) {
+  Widget _buildCustomCheckboxTile(bool isChecked, ValueChanged<bool> onChanged, String title) {
     return ListTile(
       leading: _buildCustomCheckbox(isChecked, onChanged),
       contentPadding: EdgeInsets.only(left: 20.0),
       title: Text(
-        '[필수] 개인정보 수집 및 이용 동의',
+        title,
         style: TextStyle(
           // color: isChecked ? Color(0xFF2962F7) : Colors.black,
           color: Colors.grey,

@@ -15,6 +15,7 @@ import 'package:raon_frontend/mqtt/mqttSubscriber.dart'; // MqttSubscriber 클�
 import 'dart:async';
 import 'mqtt/mqttSubscriber.dart'; // MqttSubscriber 클래스 임포트
 import 'package:http/http.dart' as http;
+import 'mqtt/mqttPublisher.dart';
 
 
 class MapScreen extends StatefulWidget {
@@ -44,6 +45,11 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   bool _isPipMode = false; // PiP 모드 여부
   late AnimationController _alertController;
   final FlutterTts _flutterTts = FlutterTts();
+
+  List<Map<String, dynamic>> scenarioDataList = [
+    {'time': '2024-08-13 19:52', 'RPM': 5458, 'Speed': 114, 'Load': 12, 'ThrottlePos': 100, 'PedalPos': 100, 'FuelStatus': 2, 'label': 1},
+
+  ];
 
   // 경로를 구성하는 좌표들 (여러 경로를 합친 것)
   List<NLatLng> customPathPoints = [
@@ -109,7 +115,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   ];
 
   void _reactAlert() {
-    _speakAlertMessage("급가속 상황입니다!   브레이크 페달을  잘 밟고 있는지   우선 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
+    _speakAlertMessage("브레이크를          밟고           있습니다.           기어를  중립에  두세요!        차량  속도가  줄어든 뒤에는         사이드 브레이크를 단계적으로 올리세요.   ");
   }
 
   @override
@@ -157,13 +163,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     //
     //   }
     // }
+    int AlertModeValue = context.read<GlobalState>().AlertMode;
     if (message == 'acc_on') {
-      if(_onState == false) {
         _sendAutomaticEmergencyAlert();
-
-        _onState = true;
-
-        int AlertModeValue = context.read<GlobalState>().AlertMode;
 
         print("Received accel message"); // 디버그 로그 추가
         // await Fluttertoast.showToast(
@@ -179,18 +181,19 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
         else {
           _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
         }
-        _reactAlert();
-      }
+        _speakAlertMessage("액셀을 밟고있습니다!     화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!   ");
+
     } else if (message == 'brake_on') {
       brake++;
-      _speakAlertMessage('브레이크를 밟고있습니다.');
-      if(brake >= 2) {
-        if(_onState == false) {
+        // _speakAlertMessage('브레이크를 밟고있습니다.');
+        if (AlertModeValue == 1) {
+          _triggerAlertPip();  // 'acc_push' 메시지 수신 시 경고 알림
+        }
+        else {
+          _triggerAlertIcon();  // 'acc_push' 메시지 수신 시 경고 알림
+        }
           _reactAlert();
           _sendAutomaticEmergencyAlert();
-          _onState = true;
-        }
-      }
       print("Received brake message"); // 디버그 로그 추가
       // await Fluttertoast.showToast(
       //   msg: "brake",
@@ -425,7 +428,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isAlert = true;
     });
-    _speakAlertMessage("액셀을 밟고있습니다!   급가속 상황입니다!   화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
+    // _speakAlertMessage("액셀을 밟고있습니다!     화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
 
     // PiP 모드로 전환
     //_enterPipMode();
@@ -434,7 +437,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       _isPipMode = true;
     });
-    _speakAlertMessage("액셀을 밟고있습니다!   급가속 상황입니다!   화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올리거나     사람이 없는 가드레일 또는      벽면에 밀어붙여     속도를 줄이세요");
+    // _speakAlertMessage("액셀을 밟고있습니다!      화면을 통해  페달을 확인하십시오.    브레이크를  있는 힘껏  꾹 밟으세요!    기어를  중립에  두세요!      차량  속도가  줄어든 뒤에는      사이드 브레이크를 단계적으로 올려     속도를 줄이세요");
     // PiP 모드로 전환
     //_enterPipMode();
   }
@@ -516,10 +519,15 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 // 새로 추가된 버튼 - 오른쪽 상단에 위치
                 Positioned(
                   child: Align(
-                    alignment: Alignment(0.95, -0.7),
+                    alignment: Alignment(-0.8, 0.6),
                     child: FloatingActionButton(
                       heroTag: 'hi',
-                      onPressed: _triggerAlertPip,
+                      onPressed: () async {
+                        for(int i = 0; i< scenarioDataList.length; i++) {
+                          await publishJsonMessage(scenarioDataList[i]);
+                          await Future.delayed(Duration(milliseconds: 600));
+                        }
+                      },
                       child: Icon(Icons.warning, color: Colors.white),
                       backgroundColor: Colors.red,
                     ),
@@ -836,7 +844,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 height: MediaQuery.of(context).size.height * 0.5,
                 color: Colors.black,
                 child: Mjpeg(
-                  stream: 'http://192.168.188.37:8080/video',
+                  stream: 'http://172.23.243.225:8080/video',
                   isLive: true,
                 ),
               ),
